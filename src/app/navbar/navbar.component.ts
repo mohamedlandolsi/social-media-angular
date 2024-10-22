@@ -1,4 +1,5 @@
 import { Component, Renderer2 } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,12 +8,13 @@ import { Component, Renderer2 } from '@angular/core';
 })
 export class NavbarComponent {
   isOpen = false; // State to track if the mobile menu is open or closed
+  username: string | null = null;
 
   toggleMenu() {
     this.isOpen = !this.isOpen;
   }
 
-  constructor(private renderer: Renderer2) {
+  constructor(private renderer: Renderer2, private authService: AuthService) {
     // Check if localStorage is available (only run this in the browser)
     if (this.isBrowser() && localStorage.getItem('darkMode') === 'enabled') {
       this.renderer.addClass(document.body, 'dark');
@@ -35,5 +37,11 @@ export class NavbarComponent {
   // Utility function to check if we're in the browser environment
   isBrowser(): boolean {
     return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
+
+  ngOnInit() {
+    this.authService.username$.subscribe((username) => {
+      this.username = username;
+    });
   }
 }
