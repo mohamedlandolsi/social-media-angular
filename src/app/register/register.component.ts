@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../services/api.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -14,10 +14,10 @@ export class RegisterComponent {
     password: '',
   };
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   registerUser() {
-    this.apiService.registerUser(this.user).subscribe({
+    this.authService.registerUser(this.user).subscribe({
       next: (response) => {
         console.log('Registration successful', response);
         this.router.navigate(['/']);

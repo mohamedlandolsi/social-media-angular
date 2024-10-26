@@ -1,4 +1,4 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   isOpen = false; // State to track if the mobile menu is open or closed
   username: string | null = null;
 
