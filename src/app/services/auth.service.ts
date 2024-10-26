@@ -11,7 +11,25 @@ export class AuthService {
   private usernameSubject = new BehaviorSubject<string | null>(null);
   username$ = this.usernameSubject.asObservable();
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) {
+    // Check for stored token and username on initialization
+    if (this.isBrowser()) {
+      const savedToken = localStorage.getItem('authToken');
+      const savedUsername = localStorage.getItem('username');
+
+      if (savedToken) {
+        this.token = savedToken;
+      }
+      if (savedUsername) {
+        this.usernameSubject.next(savedUsername);
+      }
+    }
+  }
+
+  // Method to check if localStorage is available
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && !!window.localStorage;
+  }
 
   // User Registration
   registerUser(userData: any): Observable<any> {
@@ -23,13 +41,19 @@ export class AuthService {
     return this.httpClient.post(`${this.baseUrl}/auth/login`, userData);
   }
 
+  // Set token and save to localStorage
   setToken(token: string) {
     this.token = token;
-    localStorage.setItem('authToken', token);
+    if (this.isBrowser()) {
+      localStorage.setItem('authToken', token);
+    }
   }
 
   getToken(): string | null {
-    return this.token || localStorage.getItem('authToken');
+    return (
+      this.token ||
+      (this.isBrowser() ? localStorage.getItem('authToken') : null)
+    );
   }
 
   isLoggedIn(): boolean {
@@ -38,12 +62,19 @@ export class AuthService {
 
   logout() {
     this.token = null;
-    localStorage.removeItem('authToken');
+    if (this.isBrowser()) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('username');
+    }
     this.usernameSubject.next(null);
   }
 
+  // Set username and save to localStorage
   setUsername(username: string) {
     this.usernameSubject.next(username);
+    if (this.isBrowser()) {
+      localStorage.setItem('username', username);
+    }
   }
 
   login(user: { username: string; password: string }) {
@@ -58,7 +89,7 @@ export class AuthService {
 
           // Set token and username
           this.setToken(token);
-          this.usernameSubject.next(user.username);
+          this.setUsername(user.username);
 
           // Log the user details
           console.log('User Information:');
