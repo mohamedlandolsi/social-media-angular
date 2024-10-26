@@ -107,30 +107,12 @@
               </svg>
             </button>
 
-            <button
-              type="button"
-              class="flex items-center focus:outline-none"
-              aria-label="toggle profile dropdown"
-            >
-              <div
-                class="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full"
-              >
-                <img
-                  src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
-                  class="object-cover w-full h-full"
-                  alt="avatar"
-                />
-              </div>
-
-              <!-- Display the username here -->
-              <h3
-                class="ml-2 text-gray-700 dark:text-gray-200 hidden lg:block"
-                *ngIf="username"
-              >
-                {{ username }}
-              </h3>
-            </button>
-            <button *ngIf="isLoggedIn" (click)="logout()" class="px-4 py-2 text-red-600">Logout</button>
+            <!-- User settings dropdown menu -->
+            <app-user-settings-dropdown
+              [username]="username"
+              (logout)="logout()"
+              (toggleDarkMode)="toggleDarkMode()"
+            ></app-user-settings-dropdown>
           </div>
 
           <!-- If the user is not logged in -->
@@ -144,12 +126,6 @@
               </button>
             </div>
           </ng-template>
-
-          <!-- Light/Dark mode toggle -->
-          <label class="switch ml-6">
-            <input type="checkbox" (click)="toggleDarkMode()" />
-            <span class="slider"></span>
-          </label>
         </div>
       </div>
     </div>
