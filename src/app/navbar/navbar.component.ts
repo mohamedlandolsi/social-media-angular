@@ -10,6 +10,7 @@ export class NavbarComponent implements OnInit {
   isOpen = false; // State to track if the mobile menu is open or closed
   username: string | null = null;
   isLoggedIn: boolean = false;
+  userId: string | null = null;
 
   toggleMenu() {
     this.isOpen = !this.isOpen;
@@ -43,7 +44,13 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.authService.username$.subscribe((username) => {
       this.username = username;
-      this.isLoggedIn = !!username; // Check if username exists to determine login status
+      this.isLoggedIn = !!username; // Update login status based on username
+    });
+
+    // Subscribe to user ID observable
+    this.authService.userId$.subscribe((userId) => {
+      this.userId = userId; // Update user ID
+      console.log('User ID:', this.userId); // Debugging log
     });
   }
 

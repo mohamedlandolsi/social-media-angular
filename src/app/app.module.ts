@@ -10,6 +10,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { provideHttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { UserSettingsDropdownComponent } from './user-settings-dropdown/user-settings-dropdown.component';
+import { PostComponent } from './post/post.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { UserSettingsDropdownComponent } from './user-settings-dropdown/user-set
     RegisterComponent,
     LoginComponent,
     NavbarComponent,
-    UserSettingsDropdownComponent
+    UserSettingsDropdownComponent,
+    PostComponent
   ],
   imports: [
     BrowserModule,

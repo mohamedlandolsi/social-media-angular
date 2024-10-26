@@ -1,10 +1,28 @@
 <div
-  class="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900"
+  class="flex min-h-screen bg-gray-100 dark:bg-gray-900"
 >
-  <button
-    routerLink="/login"
-    class="text-gray-600 dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:outline-none"
+  <!-- Left section -->
+  <div
+    class="flex-none w-1/4 p-4 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 flex items-center justify-center"
   >
-    Login
-  </button>
+    <!-- Left section content -->
+    <p class="text-center">Left Section</p>
+  </div>
+
+  <!-- Middle section -->
+  <div
+    class="flex-grow p-4 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center justify-center"
+  >
+    <!-- Timeline posts -->
+    <h1 class="text-center">Posts</h1>
+    <app-post></app-post>
+  </div>
+
+  <!-- Right section -->
+  <div
+    class="flex-none w-1/4 p-4 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 flex items-center justify-center"
+  >
+    <!-- Suggested users to follow -->
+    <p class="text-center">Suggested users</p>
+  </div>
 </div>

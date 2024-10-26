@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { User } from '../user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,13 +11,15 @@ export class AuthService {
   private token: string | null = null;
   private usernameSubject = new BehaviorSubject<string | null>(null);
   username$ = this.usernameSubject.asObservable();
+  private userId: string | null = null;
+  private userIdSubject = new BehaviorSubject<string | null>(null);
+  userId$ = this.userIdSubject.asObservable();
 
   constructor(private httpClient: HttpClient) {
-    // Check for stored token and username on initialization
+    // Initialization logic
     if (this.isBrowser()) {
       const savedToken = localStorage.getItem('authToken');
       const savedUsername = localStorage.getItem('username');
-
       if (savedToken) {
         this.token = savedToken;
       }
@@ -38,7 +41,10 @@ export class AuthService {
 
   // User Login
   loginUser(userData: any): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/auth/login`, userData);
+    return this.httpClient.post<{ user: User; token: string }>(
+      `${this.baseUrl}/auth/login`,
+      userData
+    );
   }
 
   // Set token and save to localStorage
@@ -77,29 +83,43 @@ export class AuthService {
     }
   }
 
+  getUserId(): string | null {
+    return this.userId;
+  }
+
   login(user: { username: string; password: string }) {
-    this.httpClient
-      .post<{ user: { username: string; email: string }; token: string }>(
-        `${this.baseUrl}/auth/login`,
-        user
-      )
+    return this.httpClient
+      .post<{ user: User; token: string }>(`${this.baseUrl}/auth/login`, user)
       .subscribe(
         (response) => {
           const { user, token } = response;
-
-          // Set token and username
-          this.setToken(token);
-          this.setUsername(user.username);
-
-          // Log the user details
-          console.log('User Information:');
-          console.log(`Username: ${user.username}`);
-          console.log(`Email: ${user.email}`);
-          console.log(`Token: ${token}`);
+  
+          console.log('Login Response:', response);
+  
+          if (user && token) {
+            this.setToken(token);
+            this.setUsername(user.username);
+            this.userId = user._id; // Store the user ID
+            this.userIdSubject.next(this.userId); // Emit the user ID
+          } else {
+            console.error('Invalid login response:', response);
+          }
         },
         (error) => {
           console.error('Login failed', error);
         }
       );
+  }  
+
+  // Set token and username, save userId
+  setLoginDetails(user: User, token: string) {
+    this.token = token;
+    this.userId = user._id; // Save user ID
+    this.usernameSubject.next(user.username);
+    if (this.isBrowser()) {
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('username', user.username);
+    }
+    console.log('User ID set to:', this.userId); // Debugging log
   }
 }

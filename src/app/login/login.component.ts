@@ -13,18 +13,20 @@ export class LoginComponent {
     password: '',
   };
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   loginUser() {
     this.authService.loginUser(this.credentials).subscribe({
       next: (response) => {
         console.log('Login successful');
         console.log(`Username: ${response.user.username}`);
-        this.authService.setToken(response.token);
-        this.authService.setUsername(response.user.username); // Set username in AuthService
+
+        // Set token and user details
+        this.authService.setLoginDetails(response.user, response.token);
+
+        console.log('Login Response:', response);
+
+        // Redirect to home or any other route
         this.router.navigate(['/']);
       },
       error: (error) => {
@@ -32,5 +34,4 @@ export class LoginComponent {
       },
     });
   }
-  
 }
