@@ -44,13 +44,14 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.authService.username$.subscribe((username) => {
       this.username = username;
-      this.isLoggedIn = !!username; // Update login status based on username
+      this.isLoggedIn = !!username; // Set isLoggedIn to true if username is truthy
     });
-
-    // Subscribe to user ID observable
+  
     this.authService.userId$.subscribe((userId) => {
-      this.userId = userId; // Update user ID
-      console.log('User ID:', this.userId); // Debugging log
+      if (userId) {
+        this.userId = userId;
+        console.log('User ID:', this.userId); // Debugging log
+      }
     });
   }
 

@@ -1,4 +1,3 @@
-// post.component.ts
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
@@ -17,36 +16,28 @@ export class PostComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.fetchPosts();
-    } else {
-      console.error('User not logged in.');
-    }
+    this.authService.userId$.subscribe((userId) => {
+      if (userId) {
+        this.fetchPosts(userId); // Fetch posts only if userId is available
+      } else {
+        console.error('User ID not found.');
+      }
+    });
   }
 
-  fetchPosts() {
-    const userId = this.authService.getUserId(); // Get user ID from AuthService
-    if (userId) {
-      const token = this.authService.getToken(); // Get the Bearer token
-      const headers = { Authorization: `Bearer ${token}` };
+  fetchPosts(userId: string) {
+    const token = this.authService.getToken(); // Get the Bearer token
+    const headers = { Authorization: `Bearer ${token}` };
 
-      this.httpClient
-        .post<any[]>(
-          `http://localhost:3000/api/post/timeline/all`,
-          { userId },
-          { headers }
-        )
-        .subscribe(
-          (response) => {
-            this.posts = response; // Store the posts
-            console.log(this.posts); // For debugging
-          },
-          (error) => {
-            console.error('Error fetching posts:', error);
-          }
-        );
-    } else {
-      console.error('User ID not found. User may not be logged in.');
-    }
+    this.httpClient
+      .get<any[]>(`http://localhost:3000/api/post/timeline/all`, { headers })
+      .subscribe(
+        (response) => {
+          this.posts = response;
+        },
+        (error) => {
+          console.error('Error fetching posts:', error);
+        }
+      );
   }
 }

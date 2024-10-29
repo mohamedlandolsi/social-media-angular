@@ -16,15 +16,20 @@ export class AuthService {
   userId$ = this.userIdSubject.asObservable();
 
   constructor(private httpClient: HttpClient) {
-    // Initialization logic
     if (this.isBrowser()) {
       const savedToken = localStorage.getItem('authToken');
       const savedUsername = localStorage.getItem('username');
+      const savedUserId = localStorage.getItem('userId'); // Retrieve saved user ID
+
       if (savedToken) {
         this.token = savedToken;
       }
       if (savedUsername) {
         this.usernameSubject.next(savedUsername);
+      }
+      if (savedUserId) {
+        this.userId = savedUserId; // Initialize user ID from localStorage
+        this.userIdSubject.next(savedUserId); // Emit the initial value
       }
     }
   }
@@ -84,7 +89,9 @@ export class AuthService {
   }
 
   getUserId(): string | null {
-    return this.userId;
+    return (
+      this.userId || (this.isBrowser() ? localStorage.getItem('userId') : null)
+    );
   }
 
   login(user: { username: string; password: string }) {
@@ -93,9 +100,9 @@ export class AuthService {
       .subscribe(
         (response) => {
           const { user, token } = response;
-  
+
           console.log('Login Response:', response);
-  
+
           if (user && token) {
             this.setToken(token);
             this.setUsername(user.username);
@@ -109,7 +116,7 @@ export class AuthService {
           console.error('Login failed', error);
         }
       );
-  }  
+  }
 
   // Set token and username, save userId
   setLoginDetails(user: User, token: string) {
@@ -119,6 +126,7 @@ export class AuthService {
     if (this.isBrowser()) {
       localStorage.setItem('authToken', token);
       localStorage.setItem('username', user.username);
+      localStorage.setItem('userId', user._id);
     }
     console.log('User ID set to:', this.userId); // Debugging log
   }

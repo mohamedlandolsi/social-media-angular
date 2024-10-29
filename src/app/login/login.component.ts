@@ -20,6 +20,7 @@ export class LoginComponent {
       next: (response) => {
         console.log('Login successful');
         console.log(`Username: ${response.user.username}`);
+        console.log(`User ID: ${response.user.id}`);
 
         // Set token and user details
         this.authService.setLoginDetails(response.user, response.token);
