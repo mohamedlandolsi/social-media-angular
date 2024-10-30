@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -9,6 +9,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class PostComponent implements OnInit {
   posts: any[] = [];
+  userId: string | undefined;
 
   constructor(
     private httpClient: HttpClient,
@@ -18,6 +19,7 @@ export class PostComponent implements OnInit {
   ngOnInit() {
     this.authService.userId$.subscribe((userId) => {
       if (userId) {
+        this.userId = userId;
         this.fetchPosts(userId);
       } else {
         console.error('User ID not found.');
@@ -59,5 +61,32 @@ export class PostComponent implements OnInit {
         console.error('Error fetching username:', error);
         return 'Unknown User';
       });
+  }
+
+  likePost(post: any) {
+    if (!this.userId) {
+      console.error('User ID not found.');
+      return;
+    }
+
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    const likeData = { userId: this.userId };
+
+    this.httpClient
+      .put(`http://localhost:3000/api/post/${post._id}/like`, likeData, {
+        headers,
+      })
+      .subscribe(
+        (response) => {
+          console.log('Post liked successfully:', response);
+          post.liked = !post.liked; // Toggle the liked state
+        },
+        (error) => {
+          console.error('Error liking post:', error);
+        }
+      );
   }
 }
