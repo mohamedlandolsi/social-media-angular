@@ -38,7 +38,8 @@ export class PostComponent implements OnInit {
           this.posts = await Promise.all(
             posts.map(async (post) => {
               const username = await this.fetchUsername(post.userId);
-              return { ...post, username }; // Attach username to each post object
+              const liked = post.likes.includes(this.userId)
+              return { ...post, username, liked }; // Attach username to each post object
             })
           );
           console.log('Posts with usernames:', this.posts); // Debugging log
