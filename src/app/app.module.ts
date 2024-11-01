@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { UserSettingsDropdownComponent } from './user-settings-dropdown/user-settings-dropdown.component';
 import { PostComponent } from './post/post.component';
 import { SuggestedUsersComponent } from './suggested-users/suggested-users.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { SuggestedUsersComponent } from './suggested-users/suggested-users.compo
     NavbarComponent,
     UserSettingsDropdownComponent,
     PostComponent,
-    SuggestedUsersComponent
+    SuggestedUsersComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
