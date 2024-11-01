@@ -11,6 +11,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { UserSettingsDropdownComponent } from './user-settings-dropdown/user-settings-dropdown.component';
 import { PostComponent } from './post/post.component';
+import { SuggestedUsersComponent } from './suggested-users/suggested-users.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PostComponent } from './post/post.component';
     LoginComponent,
     NavbarComponent,
     UserSettingsDropdownComponent,
-    PostComponent
+    PostComponent,
+    SuggestedUsersComponent
   ],
   imports: [
     BrowserModule,

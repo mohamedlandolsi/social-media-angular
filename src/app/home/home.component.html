@@ -8,16 +8,19 @@
 
   <!-- Middle section -->
   <div
-    class="flex-grow p-4 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+    class="flex-grow p-4 flex justify-center bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
   >
-    <!-- Timeline posts -->
-    <app-post class="w-5/6"></app-post>
+    <!-- Centering posts for a consistent layout -->
+    <div class="w-full max-w-3xl">
+      <app-post class="w-full"></app-post>
+    </div>
   </div>
 
   <!-- Right section -->
   <div
     class="flex-none w-1/4 p-4 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
   >
-    <p class="text-center">Suggested users</p>
+    <p class="text-center mb-10">Suggested users</p>
+    <app-suggested-users></app-suggested-users>
   </div>
 </div>
