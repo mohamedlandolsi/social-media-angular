@@ -1,24 +1,30 @@
 <div *ngIf="suggestedUsers.length > 0">
   <div
     *ngFor="let user of suggestedUsers"
-    class="w-full max-w-xs mx-auto bg-white rounded-lg shadow-lg dark:bg-gray-900 mb-4"
+    class="flex flex-col items-center mb-4 p-8 transition-colors duration-300 transform border rounded-xl hover:border-transparent group hover:dark:bg-gray-900 hover:bg-blue-900 dark:border-gray-700 dark:hover:border-transparent"
   >
     <img
-      class="w-24 h-24 mx-auto mt-4 rounded-full object-cover"
-      src="https://via.placeholder.com/150"
-      alt="Profile picture"
+      class="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300"
+      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+      alt=""
     />
-    <div class="py-4 text-center">
-      <p class="text-lg font-semibold text-gray-800 dark:text-gray-100">
-        {{ user.username }}
-      </p>
-      <button
-        (click)="followUser(user._id)"
-        class="mt-3 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600"
-      >
-        Follow
-      </button>
-    </div>
+
+    <h1
+      class="mt-4 text-2xl font-semibold text-gray-700 capitalize dark:text-white group-hover:text-white"
+    >
+      {{ user.username }}
+    </h1>
+
+    <p class="mt-2 text-gray-500 dark:text-gray-300 group-hover:text-gray-300">
+      Hi I am {{ user.username }}
+    </p>
+
+    <button
+      (click)="followUser(user._id)"
+      class="mt-3 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600"
+    >
+      Follow
+    </button>
   </div>
 </div>
 <p *ngIf="suggestedUsers.length === 0" class="text-center">
