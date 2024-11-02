@@ -34,6 +34,20 @@ export class UserService {
     return this.http.put(url, body, { headers });
   }
 
+  unfollowUser(
+    targetUserId: string,
+    currentUserId: string,
+    token: string
+  ): Observable<any> {
+    const url = `${this.baseUrl}/users/${targetUserId}/unfollow`;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    const body = { userId: currentUserId }; // Confirming JSON structure with the API expectation
+    return this.http.put(url, body, { headers });
+  }
+
   // New method to get user details, including followed users
   getUserDetails(userId: string): Observable<User> {
     const url = `${this.apiUrl}/${userId}`; // Adjust this based on your API endpoint for getting user details

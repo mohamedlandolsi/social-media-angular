@@ -6,13 +6,14 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-suggested-users',
   templateUrl: './suggested-users.component.html',
-  styleUrls: ['./suggested-users.component.css'], // Corrected 'styleUrl' to 'styleUrls'
+  styleUrls: ['./suggested-users.component.css'],
 })
 export class SuggestedUsersComponent implements OnInit {
   suggestedUsers: User[] = [];
   loggedInUserId: string | null = null;
   authToken: string | null = null;
   followingIds: string[] = [];
+  successMessage: string | null = null; // Message to show when the follow action is successful
 
   constructor(
     private userService: UserService,
@@ -38,10 +39,20 @@ export class SuggestedUsersComponent implements OnInit {
         .followUser(targetUserId, this.loggedInUserId, this.authToken)
         .subscribe({
           next: () => {
-            // Optionally, you can remove the followed user from the suggestions list
+            // Remove the followed user from the suggestions list
             this.suggestedUsers = this.suggestedUsers.filter(
               (user) => user._id !== targetUserId
             );
+
+            // Optionally add to followingIds for local state
+            this.followingIds.push(targetUserId);
+
+            // Show success message
+            this.successMessage = `You are now following user ID: ${targetUserId}`;
+            setTimeout(() => {
+              this.successMessage = null; // Clear the message after 3 seconds
+            }, 3000);
+
             console.log(`Followed user with ID: ${targetUserId}`);
           },
           error: (error) => {
