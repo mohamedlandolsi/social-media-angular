@@ -13,6 +13,7 @@ import { UserSettingsDropdownComponent } from './user-settings-dropdown/user-set
 import { PostComponent } from './post/post.component';
 import { SuggestedUsersComponent } from './suggested-users/suggested-users.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     UserSettingsDropdownComponent,
     PostComponent,
     SuggestedUsersComponent,
-    SidebarComponent
+    SidebarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

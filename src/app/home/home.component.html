@@ -6,11 +6,13 @@
   <!-- Default layout for logged-in users -->
   <!-- Left section -->
   <div
-    class="flex-none w-1/4 p-4 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+    class="hidden md:flex flex-none w-1/4 p-4 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
   >
-    <app-sidebar
-      *ngIf="router.url !== '/login' && router.url !== '/register'"
-    ></app-sidebar>
+    <div class="w-full max-w-xs mx-auto">
+      <app-sidebar
+        *ngIf="router.url !== '/login' && router.url !== '/register'"
+      ></app-sidebar>
+    </div>
   </div>
 
   <!-- Middle section -->
@@ -24,10 +26,12 @@
 
   <!-- Right section -->
   <div
-    class="flex-none w-1/4 p-4 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+    class="hidden md:flex flex-none w-1/4 p-4 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
   >
-    <p class="text-center mb-10">Suggested users</p>
-    <app-suggested-users></app-suggested-users>
+    <div class="w-full max-w-xs mx-auto">
+      <p class="text-center mb-10">Suggested users</p>
+      <app-suggested-users></app-suggested-users>
+    </div>
   </div>
 </div>
 
