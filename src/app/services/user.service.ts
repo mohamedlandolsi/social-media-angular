@@ -13,11 +13,18 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<User[]> {
-    // Specify the return type
     return this.http.get<User[]>(this.apiUrl);
   }
 
-  followUser(targetUserId: string, currentUserId: string, token: string): Observable<any> {
+  getUserById(userId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${userId}`);
+  }
+
+  followUser(
+    targetUserId: string,
+    currentUserId: string,
+    token: string
+  ): Observable<any> {
     const url = `${this.baseUrl}/users/${targetUserId}/follow`;
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -32,6 +39,4 @@ export class UserService {
     const url = `${this.apiUrl}/${userId}`; // Adjust this based on your API endpoint for getting user details
     return this.http.get<User>(url);
   }
-
-  
 }

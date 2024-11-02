@@ -37,9 +37,10 @@ export class PostComponent implements OnInit {
         async (posts) => {
           this.posts = await Promise.all(
             posts.map(async (post) => {
-              const username = await this.fetchUsername(post.userId);
-              const liked = post.likes.includes(this.userId)
-              return { ...post, username, liked }; // Attach username to each post object
+              const user = await this.fetchUser(post.userId);
+              // const username = await this.fetchUser(post.username);
+              const liked = post.likes.includes(this.userId);
+              return { ...post, ...user, liked }; // Attach username to each post object
             })
           );
           console.log('Posts with usernames:', this.posts); // Debugging log
@@ -48,6 +49,30 @@ export class PostComponent implements OnInit {
           console.error('Error fetching posts:', error);
         }
       );
+  }
+
+  fetchUser(userId: string): Promise<{ username: string; userId: string }> {
+    return this.httpClient
+      .get<{ _id: string; username?: string }>(
+        `http://localhost:3000/api/users/${userId}`
+      )
+      .toPromise()
+      .then((response) => {
+        if (response && response._id) {
+          // Check if response and _id are defined
+          return {
+            userId: response._id,
+            username: response.username || 'Unknown User',
+          };
+        } else {
+          console.warn('User not found or invalid response:', response);
+          return { userId, username: 'Unknown User' };
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching user:', error);
+        return { userId, username: 'Unknown User' };
+      });
   }
 
   fetchUsername(userId: string): Promise<string> {
