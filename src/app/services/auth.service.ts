@@ -14,6 +14,8 @@ export class AuthService {
   private userId: string | null = null;
   private userIdSubject = new BehaviorSubject<string | null>(null);
   userId$ = this.userIdSubject.asObservable();
+  private emailSubject = new BehaviorSubject<string | null>(null);
+  email$ = this.emailSubject.asObservable();
 
   constructor(private httpClient: HttpClient) {
     if (this.isBrowser()) {
@@ -28,6 +30,7 @@ export class AuthService {
   private loadLocalStorageData(): void {
     const savedToken = localStorage.getItem('authToken');
     const savedUsername = localStorage.getItem('username');
+    const savedEmail = localStorage.getItem('email');
     const savedUserId = localStorage.getItem('userId');
 
     if (savedToken) {
@@ -35,6 +38,9 @@ export class AuthService {
     }
     if (savedUsername) {
       this.usernameSubject.next(savedUsername);
+    }
+    if (savedEmail) {
+      this.emailSubject.next(savedEmail);
     }
     if (savedUserId) {
       this.userId = savedUserId;
@@ -78,6 +84,7 @@ export class AuthService {
     if (this.isBrowser()) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('username');
+      localStorage.removeItem('email');
       localStorage.removeItem('userId');
     }
   }
@@ -89,9 +96,23 @@ export class AuthService {
     }
   }
 
+  setEmail(email: string): void {
+    this.emailSubject.next(email);
+    if (this.isBrowser()) {
+      localStorage.setItem('email', email);
+    }
+  }
+
   getUserId(): string | null {
     return (
       this.userId || (this.isBrowser() ? localStorage.getItem('userId') : null)
+    );
+  }
+
+  getEmail(): string | null {
+    return (
+      this.emailSubject.value ||
+      (this.isBrowser() ? localStorage.getItem('email') : null)
     );
   }
 
@@ -104,9 +125,11 @@ export class AuthService {
     this.userId = user._id;
     this.userIdSubject.next(this.userId);
     this.setUsername(user.username);
+    this.setEmail(user.email);
     if (this.isBrowser()) {
       localStorage.setItem('authToken', token);
       localStorage.setItem('username', user.username);
+      localStorage.setItem('email', user.email);
       localStorage.setItem('userId', user._id);
     }
     console.log('User ID set to:', this.userId);

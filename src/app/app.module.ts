@@ -14,6 +14,7 @@ import { PostComponent } from './post/post.component';
 import { SuggestedUsersComponent } from './suggested-users/suggested-users.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ProfileComponent } from './profile/profile.component';
+import { LogoComponent } from './logo/logo.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ProfileComponent } from './profile/profile.component';
     PostComponent,
     SuggestedUsersComponent,
     SidebarComponent,
-    ProfileComponent
+    ProfileComponent,
+    LogoComponent
   ],
   imports: [
     BrowserModule,

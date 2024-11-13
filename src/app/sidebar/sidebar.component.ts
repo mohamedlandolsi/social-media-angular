@@ -11,6 +11,7 @@ import { ThemeService } from '../services/theme.service';
 export class SidebarComponent implements OnInit {
   isOpen = false; // State to track if the mobile menu is open or closed
   username: string | null = null;
+  email: string | null = null;
   isLoggedIn: boolean = false;
   userId: string | null = null;
 
@@ -28,6 +29,10 @@ export class SidebarComponent implements OnInit {
     this.authService.username$.subscribe((username) => {
       this.username = username;
       this.isLoggedIn = !!username; // Set isLoggedIn to true if username is truthy
+    });
+
+    this.authService.email$.subscribe((email) => {
+      this.email = email;
     });
 
     this.authService.userId$.subscribe((userId) => {
