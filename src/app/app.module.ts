@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +18,9 @@ import { SuggestedUsersComponent } from './suggested-users/suggested-users.compo
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LogoComponent } from './logo/logo.component';
+import { CreatePostComponent } from './create-post/create-post.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -28,17 +34,21 @@ import { LogoComponent } from './logo/logo.component';
     SuggestedUsersComponent,
     SidebarComponent,
     ProfileComponent,
-    LogoComponent
+    LogoComponent,
+    CreatePostComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-right', // Position of the toast
+      timeOut: 3000, // Duration in milliseconds
+      preventDuplicates: true, // Prevent duplicate toasts
+    }),
   ],
-  providers: [
-    provideClientHydration(),
-    provideHttpClient()
-  ],
-  bootstrap: [AppComponent]
+  providers: [provideClientHydration(), provideHttpClient()],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
