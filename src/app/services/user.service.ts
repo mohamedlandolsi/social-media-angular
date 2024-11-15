@@ -53,4 +53,10 @@ export class UserService {
     const url = `${this.apiUrl}/${userId}`; // Adjust this based on your API endpoint for getting user details
     return this.http.get<User>(url);
   }
+
+  // Method to get user's posts
+  getUserPosts(userId: string, token: string): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this.baseUrl}/post/user/${userId}`, { headers });
+  }
 }

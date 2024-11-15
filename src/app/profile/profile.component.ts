@@ -12,6 +12,7 @@ export class ProfileComponent implements OnInit {
   userId!: string; // ID of the user being viewed
   currentUserId: string | null; // ID of the currently logged-in user
   userData: any;
+  userPosts: any[] = []; // Array to hold user's posts
 
   constructor(
     private route: ActivatedRoute,
@@ -24,6 +25,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('userId')!;
     this.loadUserData();
+    this.loadUserPosts();
   }
 
   loadUserData() {
@@ -80,6 +82,20 @@ export class ProfileComponent implements OnInit {
       }
     } else {
       console.error('Current user ID is null or undefined');
+    }
+  }
+
+  loadUserPosts() {
+    const token = this.authService.getToken();
+    if (token) {
+      this.userService.getUserPosts(this.userId, token).subscribe(
+        (posts) => {
+          this.userPosts = posts;
+        },
+        (error) => {
+          console.error('Error loading user posts:', error);
+        }
+      );
     }
   }
 }
