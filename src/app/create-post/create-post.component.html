@@ -17,7 +17,7 @@
         d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
       />
     </svg>
-    <label class="flex-1">Add Post</label>
+    <label class="flex-1 cursor-pointer">Add Post</label>
   </button>
 
   <div
@@ -83,13 +83,22 @@
           required
         />
       </div>
-
-      <button
-        type="submit"
-        class="w-full p-2 bg-green-500 text-white rounded-lg"
-      >
-        Post
-      </button>
+      
+      <div class="flex justify-between gap-10">
+        <button
+          type="submit"
+          class="w-full p-2 bg-green-500 text-white rounded-lg"
+        >
+          Post
+        </button>
+        <button
+          type="button"
+          (click)="toggleAccordion()"
+          class="w-full p-2 bg-red-500 text-white rounded-lg"
+        >
+          Cancel
+        </button>
+      </div>
     </form>
   </div>
 </div>
