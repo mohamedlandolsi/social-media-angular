@@ -11,7 +11,9 @@ import { ToastrService } from 'ngx-toastr';
 export class CreatePostComponent {
   accordionOpen: boolean = false;
   newPost = {
+    title: '',
     description: '',
+    category: '',
     image: '',
   };
 
@@ -36,7 +38,9 @@ export class CreatePostComponent {
 
     const postPayload = {
       userId: userId,
+      title: this.newPost.title,
       description: this.newPost.description,
+      category: this.newPost.category,
       image: this.newPost.image,
     };
 
