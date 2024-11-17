@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import {
   BrowserModule,
   provideClientHydration,
@@ -48,6 +48,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       preventDuplicates: true, // Prevent duplicate toasts
     }),
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideClientHydration(), provideHttpClient()],
   bootstrap: [AppComponent],
 })
