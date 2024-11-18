@@ -11,12 +11,15 @@
       src="https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png"
       alt="avatar"
     />
-    <h4 class="mx-2 mt-2 font-medium text-gray-800 dark:text-gray-200">
-      {{ username || 'User' }}
+    <h4
+      [routerLink]="['/profile', userId]"
+      class="mx-2 mt-2 font-medium text-gray-800 dark:text-gray-200 cursor-pointer"
+    >
+      {{ username || "User" }}
     </h4>
     <p class="mx-2 mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">
-      {{ email || 'user@example.com' }}
-    </p> 
+      {{ email || "user@example.com" }}
+    </p>
   </div>
 
   <div class="flex flex-col justify-between flex-1 mt-6">
@@ -99,10 +102,20 @@
         href="/"
         (click)="logout()"
       >
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-      </svg>
-      
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="red"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+          />
+        </svg>
 
         <span class="mx-4 font-medium text-red-600">Logout</span>
       </a>
