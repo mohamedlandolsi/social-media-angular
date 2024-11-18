@@ -21,6 +21,8 @@ import { LogoComponent } from './logo/logo.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SettingsComponent } from './settings/settings.component';
+import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ProfileComponent,
     LogoComponent,
     CreatePostComponent,
+    SettingsComponent,
+    ThemeToggleComponent,
   ],
   imports: [
     BrowserModule,
