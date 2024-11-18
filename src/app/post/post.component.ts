@@ -9,6 +9,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class PostComponent implements OnInit {
   posts: any[] = [];
+  loading: boolean = true; // Loading flag
   userId: string | undefined;
 
   constructor(
@@ -38,15 +39,15 @@ export class PostComponent implements OnInit {
           this.posts = await Promise.all(
             posts.map(async (post) => {
               const user = await this.fetchUser(post.userId);
-              // const username = await this.fetchUser(post.username);
               const liked = post.likes.includes(this.userId);
-              return { ...post, ...user, liked }; // Attach username to each post object
+              return { ...post, ...user, liked };
             })
           );
-          console.log('Posts with usernames:', this.posts); // Debugging log
+          this.loading = false; // Stop loading
         },
         (error) => {
           console.error('Error fetching posts:', error);
+          this.loading = false; // Stop loading even on error
         }
       );
   }
@@ -59,7 +60,6 @@ export class PostComponent implements OnInit {
       .toPromise()
       .then((response) => {
         if (response && response._id) {
-          // Check if response and _id are defined
           return {
             userId: response._id,
             username: response.username || 'Unknown User',
@@ -72,20 +72,6 @@ export class PostComponent implements OnInit {
       .catch((error) => {
         console.error('Error fetching user:', error);
         return { userId, username: 'Unknown User' };
-      });
-  }
-
-  fetchUsername(userId: string): Promise<string> {
-    return this.httpClient
-      .get<{ username?: string }>(`http://localhost:3000/api/users/${userId}`)
-      .toPromise()
-      .then((response) => {
-        console.log('Fetched username for userId:', userId, response?.username); // Debugging log
-        return response?.username || 'Unknown User';
-      })
-      .catch((error) => {
-        console.error('Error fetching username:', error);
-        return 'Unknown User';
       });
   }
 
@@ -107,7 +93,6 @@ export class PostComponent implements OnInit {
       })
       .subscribe(
         (response) => {
-          console.log('Post liked successfully:', response);
           post.liked = !post.liked; // Toggle the liked state
         },
         (error) => {
