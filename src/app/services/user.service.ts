@@ -20,6 +20,16 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/${userId}`);
   }
 
+  updateUser(userId: string, updatedData: any, token: string): Observable<any> {
+    const url = `${this.apiUrl}/${userId}`;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put(url, updatedData, { headers });
+  }
+
   followUser(
     targetUserId: string,
     currentUserId: string,

@@ -15,55 +15,58 @@
     <div class="w-full max-w-3xl pt-10">
       <h1 class="text-2xl font-bold mb-8">Settings</h1>
 
-      <!-- Email Update Section -->
+      <!-- User Info Update Section -->
       <div class="mb-8">
-        <h2 class="text-xl font-semibold mb-4">Change Email</h2>
+        <h2 class="text-xl font-semibold mb-4">Update Profile</h2>
+
         <input
-          type="email"
-          placeholder="Enter new email"
+          [(ngModel)]="username"
+          placeholder="Username"
+          class="w-full px-4 py-2 rounded-md mb-2 dark:bg-gray-800 dark:text-gray-200"
+        />
+        <input
           [(ngModel)]="email"
-          class="w-full px-4 py-2 rounded-md dark:bg-gray-800 dark:text-gray-200"
+          placeholder="Email"
+          class="w-full px-4 py-2 rounded-md mb-2 dark:bg-gray-800 dark:text-gray-200"
         />
-        <button
-          (click)="updateEmail()"
-          class="mt-2 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500"
-        >
-          Update Email
-        </button>
-      </div>
-
-      <!-- Password Update Section -->
-      <div class="mb-8">
-        <h2 class="text-xl font-semibold mb-4">Change Password</h2>
         <input
-          type="password"
-          placeholder="Enter new password"
           [(ngModel)]="password"
-          class="w-full px-4 py-2 rounded-md dark:bg-gray-800 dark:text-gray-200"
+          type="password"
+          placeholder="Password"
+          class="w-full px-4 py-2 rounded-md mb-2 dark:bg-gray-800 dark:text-gray-200"
         />
-        <button
-          (click)="updatePassword()"
-          class="mt-2 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500"
+        <textarea
+          [(ngModel)]="description"
+          placeholder="Description"
+          class="w-full px-4 py-2 rounded-md mb-2 dark:bg-gray-800 dark:text-gray-200"
+        ></textarea>
+        <input
+          [(ngModel)]="city"
+          placeholder="City"
+          class="w-full px-4 py-2 rounded-md mb-2 dark:bg-gray-800 dark:text-gray-200"
+        />
+        <input
+          [(ngModel)]="homeTown"
+          placeholder="Home Town"
+          class="w-full px-4 py-2 rounded-md mb-2 dark:bg-gray-800 dark:text-gray-200"
+        />
+        <select
+          [(ngModel)]="relationship"
+          class="w-full px-4 py-2 rounded-md mb-2 dark:bg-gray-800 dark:text-gray-200"
         >
-          Update Password
-        </button>
-      </div>
+          <option  value="" disabled>Select Relationship Status</option>
+          <option value="single">Single</option>
+          <option value="in a relationship">In a Relationship</option>
+          <option value="married">Married</option>
+          <option value="divorced">Divorced</option>
+        </select>
 
-      <!-- Account Deletion Section -->
-      <div class="mb-8">
-        <h2 class="text-xl font-semibold mb-4">Delete Account</h2>
         <button
-          (click)="deleteAccount()"
-          class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-500"
+          (click)="updateUser()"
+          class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500"
         >
-          Delete My Account
+          Update Profile
         </button>
-      </div>
-
-      <!-- Theme Toggle Section -->
-      <div>
-        <h2 class="text-xl font-semibold mb-4">Theme</h2>
-        <app-theme-toggle></app-theme-toggle>
       </div>
     </div>
   </div>
