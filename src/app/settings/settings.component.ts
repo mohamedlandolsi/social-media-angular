@@ -90,6 +90,21 @@ export class SettingsComponent implements OnInit {
     this.userService.updateUser(this.userId, updatedData, token).subscribe(
       (response) => {
         alert('Profile updated successfully!');
+
+        // Refresh the user data in the UI
+        this.userService.getUserById(this.userId).subscribe(
+          (userData) => {
+            this.username = userData.username;
+            this.email = userData.email;
+            this.description = userData.description;
+            this.city = userData.city;
+            this.homeTown = userData.homeTown;
+            this.relationship = userData.relationship;
+          },
+          (error) => {
+            console.error('Error refreshing user data:', error);
+          }
+        );
       },
       (error) => {
         alert('Failed to update profile. Please try again.');
