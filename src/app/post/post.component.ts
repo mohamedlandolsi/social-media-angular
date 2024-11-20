@@ -11,11 +11,13 @@ export class PostComponent implements OnInit {
   posts: any[] = [];
   loading: boolean = true; // Loading flag
   userId: string | undefined;
+  protected httpClient: HttpClient;
+  protected authService: AuthService;
 
-  constructor(
-    private httpClient: HttpClient,
-    private authService: AuthService
-  ) {}
+  constructor(httpClient: HttpClient, authService: AuthService) {
+    this.httpClient = httpClient; // Store the injected HttpClient
+    this.authService = authService; // Store the injected AuthService
+  }
 
   ngOnInit() {
     this.authService.userId$.subscribe((userId) => {

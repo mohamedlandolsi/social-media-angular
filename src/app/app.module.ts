@@ -23,6 +23,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SettingsComponent } from './settings/settings.component';
 import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
+import { FeedSearchComponent } from './feed-search/feed-search.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
     CreatePostComponent,
     SettingsComponent,
     ThemeToggleComponent,
+    FeedSearchComponent,
   ],
   imports: [
     BrowserModule,
