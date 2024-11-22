@@ -56,8 +56,11 @@
           <div class="relative flex-shrink-0 group">
             <img
               class="w-32 h-32 rounded-full border-4 border-white object-cover"
-              src="https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png"
-              [src]="'http://localhost:3000/' + userData.profilePicture"
+              [src]="
+                userData?.profilePicture
+                  ? 'http://localhost:3000/' + userData.profilePicture
+                  : 'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png'
+              "
               alt="Profile Picture"
             />
 
