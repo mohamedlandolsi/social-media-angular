@@ -65,6 +65,15 @@
         </p>
       </div>
 
+      <!-- Edit button for the owner -->
+      <div *ngIf="post.userId === userId" class="mt-4">
+        <button
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600 transition-colors duration-200"
+        >
+          Edit Post
+        </button>
+      </div>
+
       <div class="flex items-center justify-between mt-4">
         <div class="flex items-center">
           <img

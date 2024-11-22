@@ -102,4 +102,32 @@ export class PostComponent implements OnInit {
         }
       );
   }
+
+  editPost(post: any) {
+    // Example: Inline editing (you can replace this with navigation to a new route for post editing)
+    const newTitle = prompt('Edit Post Title', post.title);
+    const newDescription = prompt('Edit Post Description', post.description);
+
+    if (newTitle && newDescription) {
+      const updatedData = { title: newTitle, description: newDescription };
+      const token = this.authService.getToken();
+      const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+      this.httpClient
+        .put(`http://localhost:3000/api/post/${post._id}`, updatedData, {
+          headers,
+        })
+        .subscribe(
+          (response) => {
+            post.title = newTitle;
+            post.description = newDescription;
+            alert('Post updated successfully!');
+          },
+          (error) => {
+            console.error('Error updating post:', error);
+            alert('Failed to update post. Please try again.');
+          }
+        );
+    }
+  }
 }
