@@ -7,22 +7,74 @@
 
     <!-- Main Content -->
     <div class="flex-grow">
+      <!-- Only displays when it's the user's profile -->
+      <!-- <div *ngIf="currentUserId === userId">
+        <h1 class="text-slate-50">This is your profile</h1>
+      </div> -->
+
       <!-- User Info Section -->
       <section class="container mx-auto px-6 py-10">
+        <!-- Cover Picture -->
+        <div class="w-full h-40 lg:h-60 bg-cover bg-center relative group">
+          <img
+            class="object-cover w-full h-full"
+            src="https://cdn.pixabay.com/photo/2020/02/24/06/33/crescent-4875339_640.jpg"
+            alt="Cover Picture"
+          />
+          <!-- Optional Overlay -->
+          <div class="absolute inset-0 bg-black bg-opacity-25"></div>
+
+          <!-- Edit Button (Visible on Hover) -->
+          <div
+            class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            *ngIf="currentUserId === userId"
+          >
+            <label
+              for="coverPictureInput"
+              class="cursor-pointer px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600"
+            >
+              Update Cover Picture
+            </label>
+            <input
+              id="coverPictureInput"
+              type="file"
+              accept="image/*"
+              (change)="updateCoverPicture($event)"
+              class="hidden"
+            />
+          </div>
+        </div>
+
         <div
           class="flex flex-col lg:flex-row items-center lg:items-start bg-gray-100 dark:bg-gray-800 rounded-lg p-6 shadow-lg"
         >
           <!-- Profile Picture -->
-          <div class="relative flex-shrink-0">
+          <div class="relative flex-shrink-0 group">
             <img
-              class="w-32 h-32 rounded-full border-4 border-white"
+              class="w-32 h-32 rounded-full border-4 border-white object-cover"
               src="https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png"
               alt="Profile Picture"
             />
-            <!-- Optional Cover -->
+
+            <!-- Edit Button (Visible on Hover) -->
             <div
-              class="absolute inset-x-0 top-0 h-20 bg-blue-500 rounded-t-lg lg:hidden"
-            ></div>
+              *ngIf="currentUserId === userId"
+              class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            >
+              <label
+                for="profilePictureInput"
+                class="cursor-pointer px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600"
+              >
+                Edit
+              </label>
+              <input
+                id="profilePictureInput"
+                type="file"
+                accept="image/*"
+                (change)="updateProfilePicture($event)"
+                class="hidden"
+              />
+            </div>
           </div>
 
           <!-- User Info -->
