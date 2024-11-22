@@ -103,20 +103,20 @@ export class ProfileComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0] && this.currentUserId === this.userId) {
       const file = input.files[0];
-      const formData = new FormData();
-      formData.append('profilePicture', file);
-
       const token = this.authService.getToken();
+
       if (token) {
-        this.userService.updateUser(this.userId, formData, token).subscribe(
-          (response) => {
-            console.log('Profile picture updated:', response);
-            this.loadUserData(); // Refresh user data
-          },
-          (error) => {
-            console.error('Error updating profile picture:', error);
-          }
-        );
+        this.userService
+          .updateProfilePicture(this.userId, file, token)
+          .subscribe(
+            (response) => {
+              console.log('Profile picture updated:', response);
+              this.loadUserData(); // Refresh user data
+            },
+            (error) => {
+              console.error('Error updating profile picture:', error);
+            }
+          );
       }
     }
   }
@@ -125,12 +125,10 @@ export class ProfileComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0] && this.currentUserId === this.userId) {
       const file = input.files[0];
-      const formData = new FormData();
-      formData.append('coverPicture', file);
-
       const token = this.authService.getToken();
+
       if (token) {
-        this.userService.updateUser(this.userId, formData, token).subscribe(
+        this.userService.updateCoverPicture(this.userId, file, token).subscribe(
           (response) => {
             console.log('Cover picture updated:', response);
             this.loadUserData(); // Refresh user data

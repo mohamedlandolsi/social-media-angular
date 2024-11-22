@@ -30,6 +30,38 @@ export class UserService {
     return this.http.put(url, updatedData, { headers });
   }
 
+  updateProfilePicture(
+    userId: string,
+    file: File,
+    token: string
+  ): Observable<any> {
+    const url = `${this.apiUrl}/${userId}/profilePicture`;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+    formData.append('profilePicture', file);
+
+    return this.http.put(url, formData, { headers });
+  }
+
+  updateCoverPicture(
+    userId: string,
+    file: File,
+    token: string
+  ): Observable<any> {
+    const url = `${this.apiUrl}/${userId}/coverPicture`;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+    formData.append('coverPicture', file);
+
+    return this.http.put(url, formData, { headers });
+  }
+
   followUser(
     targetUserId: string,
     currentUserId: string,
