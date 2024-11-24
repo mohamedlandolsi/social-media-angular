@@ -82,13 +82,13 @@ export class PostComponent implements OnInit {
       console.error('User ID not found.');
       return;
     }
-
+  
     const token = this.authService.getToken();
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
     const likeData = { userId: this.userId };
-
+  
     this.httpClient
       .put(`http://localhost:3000/api/post/${post._id}/like`, likeData, {
         headers,
@@ -96,12 +96,17 @@ export class PostComponent implements OnInit {
       .subscribe(
         (response) => {
           post.liked = !post.liked; // Toggle the liked state
+          // Optionally update the like count
+          post.likes = post.liked 
+            ? [...post.likes, this.userId] 
+            : post.likes.filter((id: string) => id !== this.userId);
         },
         (error) => {
           console.error('Error liking post:', error);
         }
       );
   }
+  
 
   editPost(post: any) {
     // Example: Inline editing (you can replace this with navigation to a new route for post editing)
