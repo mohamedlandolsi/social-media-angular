@@ -5,7 +5,11 @@
   >
     <img
       class="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300"
-      src="https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png"
+      [src]="
+                user?.profilePicture
+                  ? 'http://localhost:3000/' + user.profilePicture
+                  : 'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png'
+              "
       alt=""
     />
 
