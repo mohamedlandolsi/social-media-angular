@@ -11,13 +11,8 @@ export class PostComponent implements OnInit {
   posts: any[] = [];
   loading: boolean = true; // Loading flag
   userId: string | undefined;
-  protected httpClient: HttpClient;
-  protected authService: AuthService;
 
-  constructor(httpClient: HttpClient, authService: AuthService) {
-    this.httpClient = httpClient; // Store the injected HttpClient
-    this.authService = authService; // Store the injected AuthService
-  }
+  constructor(protected httpClient: HttpClient, protected authService: AuthService) {}
 
   ngOnInit() {
     this.authService.userId$.subscribe((userId) => {
@@ -42,7 +37,7 @@ export class PostComponent implements OnInit {
             posts.map(async (post) => {
               const user = await this.fetchUser(post.userId);
               const liked = post.likes.includes(this.userId);
-              return { ...post, ...user, liked };
+              return { ...post, ...user, liked, dropdownOpen: false, isEditing: false };
             })
           );
           this.loading = false; // Stop loading
@@ -56,9 +51,7 @@ export class PostComponent implements OnInit {
 
   fetchUser(userId: string): Promise<{ username: string; userId: string }> {
     return this.httpClient
-      .get<{ _id: string; username?: string }>(
-        `http://localhost:3000/api/users/${userId}`
-      )
+      .get<{ _id: string; username?: string }>(`http://localhost:3000/api/users/${userId}`)
       .toPromise()
       .then((response) => {
         if (response && response._id) {
@@ -77,28 +70,27 @@ export class PostComponent implements OnInit {
       });
   }
 
+  toggleDropdown(post: any) {
+    post.dropdownOpen = !post.dropdownOpen;
+  }
+
   likePost(post: any) {
     if (!this.userId) {
       console.error('User ID not found.');
       return;
     }
-  
+
     const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     const likeData = { userId: this.userId };
-  
+
     this.httpClient
-      .put(`http://localhost:3000/api/post/${post._id}/like`, likeData, {
-        headers,
-      })
+      .put(`http://localhost:3000/api/post/${post._id}/like`, likeData, { headers })
       .subscribe(
         (response) => {
           post.liked = !post.liked; // Toggle the liked state
-          // Optionally update the like count
-          post.likes = post.liked 
-            ? [...post.likes, this.userId] 
+          post.likes = post.liked
+            ? [...post.likes, this.userId]
             : post.likes.filter((id: string) => id !== this.userId);
         },
         (error) => {
@@ -106,33 +98,53 @@ export class PostComponent implements OnInit {
         }
       );
   }
-  
 
   editPost(post: any) {
-    // Example: Inline editing (you can replace this with navigation to a new route for post editing)
-    const newTitle = prompt('Edit Post Title', post.title);
-    const newDescription = prompt('Edit Post Description', post.description);
+    post.isEditing = true;
+    post.newTitle = post.title;
+    post.newDescription = post.description;
+  }
 
-    if (newTitle && newDescription) {
-      const updatedData = { title: newTitle, description: newDescription };
-      const token = this.authService.getToken();
-      const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+  savePost(post: any) {
+    const updatedData = { title: post.newTitle, description: post.newDescription };
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-      this.httpClient
-        .put(`http://localhost:3000/api/post/${post._id}`, updatedData, {
-          headers,
-        })
-        .subscribe(
-          (response) => {
-            post.title = newTitle;
-            post.description = newDescription;
-            alert('Post updated successfully!');
-          },
-          (error) => {
-            console.error('Error updating post:', error);
-            alert('Failed to update post. Please try again.');
-          }
-        );
-    }
+    this.httpClient
+      .put(`http://localhost:3000/api/post/${post._id}`, updatedData, { headers })
+      .subscribe(
+        (response) => {
+          post.title = post.newTitle;
+          post.description = post.newDescription;
+          post.isEditing = false;
+          alert('Post updated successfully!');
+        },
+        (error) => {
+          console.error('Error updating post:', error);
+          alert('Failed to update post. Please try again.');
+        }
+      );
+  }
+
+  cancelEditing(post: any) {
+    post.isEditing = false;
+  }
+
+  deletePost(post: any) {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+    this.httpClient
+      .delete(`http://localhost:3000/api/post/${post._id}`, { headers })
+      .subscribe(
+        (response) => {
+          this.posts = this.posts.filter((p) => p._id !== post._id);
+          alert('Post deleted successfully!');
+        },
+        (error) => {
+          console.error('Error deleting post:', error);
+          alert('Failed to delete post. Please try again.');
+        }
+      );
   }
 }

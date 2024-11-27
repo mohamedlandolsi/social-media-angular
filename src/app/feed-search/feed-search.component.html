@@ -51,92 +51,164 @@
       class="w-full mb-8 mt-10 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 transition-transform duration-200 hover:shadow-2xl hover:scale-105"
       *ngFor="let post of posts"
     >
-      <img
-        class="object-cover w-full h-64 rounded-t-lg"
-        src="https://images.unsplash.com/photo-1550439062-609e1531270e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-        [alt]="post.title"
-      />
-
-      <div class="p-6">
-        <div class="mb-3">
-          <span
-            class="text-xs font-semibold text-blue-600 uppercase dark:text-blue-400"
-            >{{ post.category || "Category" }}</span
-          >
-          <a
-            href="#"
-            class="block mt-1 text-2xl font-bold text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-300"
-            tabindex="0"
-            role="link"
-            >{{ post.title || "Post Title" }}</a
-          >
-          <p
-            class="mt-3 text-sm text-gray-700 dark:text-gray-400 leading-relaxed"
-          >
-            {{ post.description }}
-          </p>
-        </div>
-
-        <!-- Edit button for the owner -->
-        <div *ngIf="post.userId === userId" class="mt-4">
+      <div *ngIf="!post.isEditing">
+        <!-- Edit/Delete for Owner -->
+        <div *ngIf="post.userId === userId" class="relative">
           <button
-            (click)="editPost(post)"
-            class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600 transition-colors duration-200"
+            (click)="toggleDropdown(post)"
+            class="px-2 py-1 text-gray-500 bg-gray-200 rounded hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-400 float-end"
           >
-            Edit Post
+            ⋮
           </button>
+          <div
+            *ngIf="post.dropdownOpen"
+            class="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg dark:bg-gray-700"
+          >
+            <button
+              (click)="editPost(post)"
+              class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-600"
+            >
+              Edit
+            </button>
+            <button
+              (click)="deletePost(post)"
+              class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-white dark:text-gray-200 dark:hover:bg-red-500"
+            >
+              Delete
+            </button>
+          </div>
         </div>
 
-        <div class="flex items-center justify-between mt-4">
-          <div class="flex items-center">
-            <img
-              class="object-cover w-10 h-10 mr-2 rounded-full"
-              src="https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png"
-              alt="Avatar"
-            />
+        <img
+          class="object-cover w-full h-64 rounded-t-lg"
+          src="https://images.unsplash.com/photo-1550439062-609e1531270e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+          [alt]="post.title"
+        />
+
+        <div class="p-6">
+          <div class="mb-3">
+            <span
+              class="text-xs font-semibold text-blue-600 uppercase dark:text-blue-400"
+              >{{ post.category || "Category" }}</span
+            >
             <a
-              [routerLink]="['/profile', post.userId]"
-              class="font-semibold text-gray-700 dark:text-gray-200"
+              href="#"
+              class="block mt-1 text-2xl font-bold text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-300"
               tabindex="0"
               role="link"
+              >{{ post.title || "Post Title" }}</a
             >
-              {{ post.username || "Unknown User" }}
-            </a>
+            <p
+              class="mt-3 text-sm text-gray-700 dark:text-gray-400 leading-relaxed"
+            >
+              {{ post.description }}
+            </p>
           </div>
-          <span class="text-xs text-gray-600 dark:text-gray-300">{{
-            post.createdAt | date : "mediumDate"
-          }}</span>
+
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex items-center">
+              <img
+                class="object-cover w-10 h-10 mr-2 rounded-full"
+                src="https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png"
+                alt="Avatar"
+              />
+              <a
+                [routerLink]="['/profile', post.userId]"
+                class="font-semibold text-gray-700 dark:text-gray-200"
+                tabindex="0"
+                role="link"
+              >
+                {{ post.username || "Unknown User" }}
+              </a>
+            </div>
+            <span class="text-xs text-gray-600 dark:text-gray-300">{{
+              post.createdAt | date : "mediumDate"
+            }}</span>
+          </div>
+        </div>
+        <hr class="border-gray-200 dark:border-gray-700" />
+        <!-- Like/Dislike buttons at the bottom -->
+        <div class="mt-4 clearfix">
+          <button
+            (click)="likePost(post)"
+            [ngClass]="{
+              'bg-red-500 text-white': post.liked,
+              'bg-white text-gray-600 dark:bg-gray-900 dark:text-gray-300':
+                !post.liked
+            }"
+            class="flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 sm:text-base sm:px-6 dark:hover:bg-gray-700 gap-x-3 hover:bg-gray-100 dark:border-gray-700 dark:divide-gray-700 float-left"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              class="w-5 h-5 sm:w-6 sm:h-6"
+            >
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
+            </svg>
+            <span>{{ post.liked ? "Liked" : "Like" }}</span>
+          </button>
+          <div class="pr-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6 float-right"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+              />
+            </svg>
+            <a href="#" class="float-right">{{ post.likes.length }}</a>
+          </div>
         </div>
       </div>
-      <hr class="border-gray-200 dark:border-gray-700 ">
-      <!-- Like/Dislike buttons at the bottom -->
-      <div class="mt-4 clearfix">
-        <button
-          (click)="likePost(post)"
-          [ngClass]="{
-            'bg-red-500 text-white': post.liked,
-            'bg-white text-gray-600 dark:bg-gray-900 dark:text-gray-300':
-              !post.liked
-          }"
-          class="flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 sm:text-base sm:px-6 dark:hover:bg-gray-700 gap-x-3 hover:bg-gray-100 dark:border-gray-700 dark:divide-gray-700 float-left"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            class="w-5 h-5 sm:w-6 sm:h-6"
-          >
-            <path
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+      <!-- Edit Form -->
+      <div *ngIf="post.isEditing" class="p-6">
+        <form (submit)="savePost(post)">
+          <div>
+            <label for="title" class="block text-sm font-medium">Title</label>
+            <input
+              id="title"
+              [(ngModel)]="post.newTitle"
+              name="newTitle"
+              type="text"
+              class="w-full mt-1 p-2 border rounded text-black"
             />
-          </svg>
-          <span>{{ post.liked ? "Liked" : "Like" }}</span>
-        </button>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 float-right" >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-        </svg>
-        <a href="#" class="float-right">{{ post.likes.length }}</a>
-        
+          </div>
+          <div class="mt-4">
+            <label for="description" class="block text-sm font-medium"
+              >Description</label
+            >
+            <textarea
+              id="description"
+              [(ngModel)]="post.newDescription"
+              name="newDescription"
+              class="w-full mt-1 p-2 border rounded text-black"
+            ></textarea>
+          </div>
+          <div class="flex justify-end gap-2 mt-4">
+            <button
+              type="button"
+              (click)="cancelEditing(post)"
+              class="px-4 py-2 bg-gray-500 text-white rounded"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              Save
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
