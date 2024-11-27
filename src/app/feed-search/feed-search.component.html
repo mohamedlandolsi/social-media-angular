@@ -52,6 +52,12 @@
       *ngFor="let post of posts"
     >
       <div *ngIf="!post.isEditing">
+        <img
+          class="object-cover w-full h-64 rounded-t-lg"
+          src="https://images.unsplash.com/photo-1550439062-609e1531270e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+          [alt]="post.title"
+        />
+
         <!-- Edit/Delete for Owner -->
         <div *ngIf="post.userId === userId" class="relative">
           <button
@@ -79,12 +85,6 @@
           </div>
         </div>
 
-        <img
-          class="object-cover w-full h-64 rounded-t-lg"
-          src="https://images.unsplash.com/photo-1550439062-609e1531270e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-          [alt]="post.title"
-        />
-
         <div class="p-6">
           <div class="mb-3">
             <span
@@ -109,7 +109,11 @@
             <div class="flex items-center">
               <img
                 class="object-cover w-10 h-10 mr-2 rounded-full"
-                src="https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png"
+                [src]="
+                post?.profilePicture
+                  ? 'http://localhost:3000/' + post.profilePicture
+                  : 'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png'
+              "
                 alt="Avatar"
               />
               <a

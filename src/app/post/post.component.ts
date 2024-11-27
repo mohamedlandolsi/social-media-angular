@@ -12,7 +12,10 @@ export class PostComponent implements OnInit {
   loading: boolean = true; // Loading flag
   userId: string | undefined;
 
-  constructor(protected httpClient: HttpClient, protected authService: AuthService) {}
+  constructor(
+    protected httpClient: HttpClient,
+    protected authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.authService.userId$.subscribe((userId) => {
@@ -37,7 +40,13 @@ export class PostComponent implements OnInit {
             posts.map(async (post) => {
               const user = await this.fetchUser(post.userId);
               const liked = post.likes.includes(this.userId);
-              return { ...post, ...user, liked, dropdownOpen: false, isEditing: false };
+              return {
+                ...post,
+                ...user,
+                liked,
+                dropdownOpen: false,
+                isEditing: false,
+              };
             })
           );
           this.loading = false; // Stop loading
@@ -51,27 +60,44 @@ export class PostComponent implements OnInit {
 
   fetchUser(userId: string): Promise<{ username: string; userId: string }> {
     return this.httpClient
-      .get<{ _id: string; username?: string }>(`http://localhost:3000/api/users/${userId}`)
+      .get<{ _id: string; username?: string; profilePicture?: string }>(
+        `http://localhost:3000/api/users/${userId}`
+      )
       .toPromise()
       .then((response) => {
         if (response && response._id) {
           return {
             userId: response._id,
             username: response.username || 'Unknown User',
+            profilePicture: response.profilePicture,
           };
         } else {
           console.warn('User not found or invalid response:', response);
-          return { userId, username: 'Unknown User' };
+          return {
+            userId,
+            username: 'Unknown User',
+            profilePicture:
+              'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png',
+          };
         }
       })
       .catch((error) => {
         console.error('Error fetching user:', error);
-        return { userId, username: 'Unknown User' };
+        return {
+          userId,
+          username: 'Unknown User',
+          profilePicture:
+            'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png',
+        };
       });
   }
 
   toggleDropdown(post: any) {
     post.dropdownOpen = !post.dropdownOpen;
+  }
+
+  closeDropdown(post: any) {
+    post.dropdownOpen = false;
   }
 
   likePost(post: any) {
@@ -85,7 +111,9 @@ export class PostComponent implements OnInit {
     const likeData = { userId: this.userId };
 
     this.httpClient
-      .put(`http://localhost:3000/api/post/${post._id}/like`, likeData, { headers })
+      .put(`http://localhost:3000/api/post/${post._id}/like`, likeData, {
+        headers,
+      })
       .subscribe(
         (response) => {
           post.liked = !post.liked; // Toggle the liked state
@@ -106,12 +134,17 @@ export class PostComponent implements OnInit {
   }
 
   savePost(post: any) {
-    const updatedData = { title: post.newTitle, description: post.newDescription };
+    const updatedData = {
+      title: post.newTitle,
+      description: post.newDescription,
+    };
     const token = this.authService.getToken();
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
     this.httpClient
-      .put(`http://localhost:3000/api/post/${post._id}`, updatedData, { headers })
+      .put(`http://localhost:3000/api/post/${post._id}`, updatedData, {
+        headers,
+      })
       .subscribe(
         (response) => {
           post.title = post.newTitle;

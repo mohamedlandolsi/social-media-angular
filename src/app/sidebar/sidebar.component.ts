@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { ThemeService } from '../services/theme.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,9 +15,11 @@ export class SidebarComponent implements OnInit {
   email: string | null = null;
   isLoggedIn: boolean = false;
   userId: string | null = null;
+  userData: any;
 
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private themeService: ThemeService
   ) {}
@@ -41,6 +44,8 @@ export class SidebarComponent implements OnInit {
         console.log('User ID:', this.userId); // Debugging log
       }
     });
+
+    this.loadUserData();
   }
 
   toggleMenu() {
@@ -50,6 +55,14 @@ export class SidebarComponent implements OnInit {
   toggleDarkMode() {
     // Delegate dark mode toggling to ThemeService
     this.themeService.toggleDarkMode();
+  }
+
+  loadUserData() {
+    if (this.userId) {
+      this.userService.getUserById(this.userId).subscribe((data) => {
+        this.userData = data; // Store data in a component property
+      });
+    }
   }
 
   logout() {
