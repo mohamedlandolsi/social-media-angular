@@ -31,7 +31,7 @@ export class PostComponent implements OnInit {
   fetchPosts(userId: string) {
     const token = this.authService.getToken();
     const headers = { Authorization: `Bearer ${token}` };
-  
+
     this.httpClient
       .get<any[]>(`http://localhost:3000/api/post/timeline/all`, { headers })
       .subscribe(
@@ -58,7 +58,6 @@ export class PostComponent implements OnInit {
         }
       );
   }
-  
 
   fetchUser(userId: string): Promise<{ username: string; userId: string }> {
     return this.httpClient
@@ -135,22 +134,26 @@ export class PostComponent implements OnInit {
     post.newDescription = post.description;
   }
 
-  savePost(post: any) {
-    const updatedData = {
-      title: post.newTitle,
-      description: post.newDescription,
-    };
+  savePost(post: any): void {
+    const formData = new FormData();
+    formData.append('title', post.newTitle);
+    formData.append('description', post.newDescription);
+    if (post.newImage) {
+      formData.append('image', post.newImage); // Add the selected file
+    }
+
     const token = this.authService.getToken();
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
     this.httpClient
-      .put(`http://localhost:3000/api/post/${post._id}`, updatedData, {
-        headers,
-      })
+      .put(`http://localhost:3000/api/post/${post._id}`, formData, { headers })
       .subscribe(
-        (response) => {
+        (response: any) => {
           post.title = post.newTitle;
           post.description = post.newDescription;
+          if (response.image) {
+            post.image = response.image; // Update the post's image URL
+          }
           post.isEditing = false;
           alert('Post updated successfully!');
         },

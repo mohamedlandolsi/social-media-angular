@@ -54,7 +54,7 @@
       <div *ngIf="!post.isEditing">
         <img
           *ngIf="post.image"
-          class="object-cover w-full h-64 rounded-t-lg"
+          class="object-contain w-full h-64 rounded-t-lg"
           [src]="'http://localhost:3000' + post.image"
           [alt]="post.title"
         />
@@ -178,25 +178,36 @@
       <div *ngIf="post.isEditing" class="p-6">
         <form (submit)="savePost(post)">
           <div>
-            <label for="title" class="block text-sm font-medium">Title</label>
+            <label for="title" class="block text-gray-700 dark:text-gray-200">Title</label>
             <input
               id="title"
               [(ngModel)]="post.newTitle"
               name="newTitle"
               type="text"
-              class="w-full mt-1 p-2 border rounded text-black"
+              class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200"
             />
           </div>
           <div class="mt-4">
-            <label for="description" class="block text-sm font-medium"
+            <label for="description" class="block text-gray-700 dark:text-gray-200"
               >Description</label
             >
             <textarea
               id="description"
               [(ngModel)]="post.newDescription"
               name="newDescription"
-              class="w-full mt-1 p-2 border rounded text-black"
+              class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200"
             ></textarea>
+          </div>
+          <div class="mt-4">
+            <label for="image" class="block text-gray-700 dark:text-gray-200"
+              >Upload Image</label
+            >
+            <input
+              id="image"
+              type="file"
+              (change)="onImageSelected($event, post)"
+              class="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full file:cursor-pointer dark:file:bg-gray-800 dark:file:text-gray-200 dark:text-gray-300 placeholder-gray-400/70 dark:placeholder-gray-500 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-blue-300"
+            />
           </div>
           <div class="flex justify-end gap-2 mt-4">
             <button
