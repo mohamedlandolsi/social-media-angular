@@ -202,4 +202,64 @@ export class PostComponent implements OnInit {
       this.deletePost(post);
     }
   }
+
+  addComment(post: any, commentText: string): void {
+    if (!this.userId || !commentText.trim()) {
+      console.error('User ID or comment text is missing.');
+      return;
+    }
+
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+    const commentData = {
+      userId: this.userId,
+      text: commentText,
+    };
+
+    this.httpClient
+      .post(`http://localhost:3000/api/post/${post._id}/comment`, commentData, {
+        headers,
+      })
+      .subscribe(
+        (newComment: any) => {
+          post.comments.push(newComment); // Append new comment to the post's comments array
+        },
+        (error) => {
+          console.error('Error adding comment:', error);
+        }
+      );
+  }
+
+  toggleComments(post: any): void {
+    if (post.commentsLoaded) {
+      post.commentsOpen = !post.commentsOpen; // Toggle accordion
+      return;
+    }
+
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+    interface Comment {
+      id: string;
+      userId: string;
+      text: string;
+      createdAt: string;
+    }
+
+    this.httpClient
+      .get<Comment[]>(`http://localhost:3000/api/post/${post._id}/comments`, {
+        headers,
+      })
+      .subscribe(
+        (comments) => {
+          post.comments = comments; // Load comments for the post
+          post.commentsLoaded = true;
+          post.commentsOpen = true; // Open accordion
+        },
+        (error) => {
+          console.error('Error fetching comments:', error);
+        }
+      );
+  }
 }
