@@ -40,6 +40,7 @@ export class FeedSearchComponent extends PostComponent {
               return {
                 ...post,
                 ...user,
+                image: post.image,
                 liked,
                 dropdownOpen: false,
                 isEditing: false,

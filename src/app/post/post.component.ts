@@ -31,7 +31,7 @@ export class PostComponent implements OnInit {
   fetchPosts(userId: string) {
     const token = this.authService.getToken();
     const headers = { Authorization: `Bearer ${token}` };
-
+  
     this.httpClient
       .get<any[]>(`http://localhost:3000/api/post/timeline/all`, { headers })
       .subscribe(
@@ -43,6 +43,7 @@ export class PostComponent implements OnInit {
               return {
                 ...post,
                 ...user,
+                image: post.image,
                 liked,
                 dropdownOpen: false,
                 isEditing: false,
@@ -57,6 +58,7 @@ export class PostComponent implements OnInit {
         }
       );
   }
+  
 
   fetchUser(userId: string): Promise<{ username: string; userId: string }> {
     return this.httpClient

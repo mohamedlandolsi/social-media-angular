@@ -53,8 +53,9 @@
     >
       <div *ngIf="!post.isEditing">
         <img
+          *ngIf="post.image"
           class="object-cover w-full h-64 rounded-t-lg"
-          src="https://images.unsplash.com/photo-1550439062-609e1531270e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+          [src]="'http://localhost:3000' + post.image"
           [alt]="post.title"
         />
 
@@ -110,10 +111,10 @@
               <img
                 class="object-cover w-10 h-10 mr-2 rounded-full"
                 [src]="
-                post?.profilePicture
-                  ? 'http://localhost:3000/' + post.profilePicture
-                  : 'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png'
-              "
+                  post?.profilePicture
+                    ? 'http://localhost:3000/' + post.profilePicture
+                    : 'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png'
+                "
                 alt="Avatar"
               />
               <a

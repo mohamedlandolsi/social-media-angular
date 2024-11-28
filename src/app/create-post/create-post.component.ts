@@ -14,8 +14,8 @@ export class CreatePostComponent {
     title: '',
     description: '',
     category: '',
-    image: '',
   };
+  selectedFile: File | null = null; // Store the selected image file
 
   constructor(
     private http: HttpClient,
@@ -27,6 +27,10 @@ export class CreatePostComponent {
     this.accordionOpen = !this.accordionOpen;
   }
 
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+
   createPost(): void {
     const userId = this.authService.getUserId();
     const token = this.authService.getToken();
@@ -36,25 +40,26 @@ export class CreatePostComponent {
       return;
     }
 
-    const postPayload = {
-      userId: userId,
-      title: this.newPost.title,
-      description: this.newPost.description,
-      category: this.newPost.category,
-      image: this.newPost.image,
-    };
+    // Create a FormData object to send form data and the image file
+    const formData = new FormData();
+    formData.append('title', this.newPost.title);
+    formData.append('description', this.newPost.description);
+    formData.append('category', this.newPost.category);
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile, this.selectedFile.name);
+    }
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http
-      .post('http://localhost:3000/api/post/', postPayload, { headers })
+      .post('http://localhost:3000/api/post/', formData, { headers })
       .subscribe({
         next: (response) => {
           console.log('Post created:', response);
           this.toastr.success('Post created successfully!', 'Success');
           this.accordionOpen = false;
-          this.newPost.description = '';
-          this.newPost.image = '';
+          this.newPost = { title: '', description: '', category: '' };
+          this.selectedFile = null;
         },
         error: (err) => {
           console.error('Error creating post:', err);
