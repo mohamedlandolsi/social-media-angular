@@ -24,6 +24,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SettingsComponent } from './settings/settings.component';
 import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 import { FeedSearchComponent } from './feed-search/feed-search.component';
+import { AdvancedFilterComponent } from './advanced-filter/advanced-filter.component';
+import { SortByComponent } from './sort-by/sort-by.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { FeedSearchComponent } from './feed-search/feed-search.component';
     SettingsComponent,
     ThemeToggleComponent,
     FeedSearchComponent,
+    AdvancedFilterComponent,
+    SortByComponent,
   ],
   imports: [
     BrowserModule,

@@ -10,9 +10,15 @@ import { AuthService } from '../services/auth.service';
 })
 export class FeedSearchComponent extends PostComponent {
   searchQuery: string = ''; // Bind to input field
+  filterOption: string = ''; // Tracks the selected filter option
 
   constructor(httpClient: HttpClient, authService: AuthService) {
-    super(httpClient, authService); // Pass dependencies to the parent constructor
+    super(httpClient, authService);
+  }
+
+  onFilterSelected(filter: string): void {
+    this.filterOption = filter;
+    this.onSearch(); // Trigger the search whenever the filter changes
   }
 
   onSearch(): void {
@@ -26,11 +32,16 @@ export class FeedSearchComponent extends PostComponent {
 
     this.loading = true;
 
+    // Construct query params
+    let queryParams = `query=${this.searchQuery}`;
+    if (this.filterOption) {
+      queryParams += `&filter=${this.filterOption}`;
+    }
+
     this.httpClient
-      .get<any[]>(
-        `http://localhost:3000/api/post/search?query=${this.searchQuery}`,
-        { headers }
-      )
+      .get<any[]>(`http://localhost:3000/api/post/search?${queryParams}`, {
+        headers,
+      })
       .subscribe(
         async (response) => {
           this.posts = await Promise.all(
@@ -56,12 +67,39 @@ export class FeedSearchComponent extends PostComponent {
       );
   }
 
-  onImageSelected(event: Event, post: any): void {
+  override onImageSelected(event: Event, post: any): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       post.newImage = file; // Store the selected file in the post object
     }
   }
+
+  onSortChange(sortOption: string): void {
+    console.log(`Selected sort option: ${sortOption}`);
   
+    this.loading = true;
+  
+    const token = this.authService.getToken();
+    const headers = { Authorization: `Bearer ${token}` };
+  
+    let queryParams = `query=${this.searchQuery}`;
+    if (this.filterOption) {
+      queryParams += `&filter=${this.filterOption}`;
+    }
+    queryParams += `&sort=${sortOption}`; // Append sort parameter
+  
+    this.httpClient
+      .get<any[]>(`http://localhost:3000/api/post/search?${queryParams}`, { headers })
+      .subscribe(
+        (response) => {
+          this.posts = response;
+          this.loading = false;
+        },
+        (error) => {
+          console.error('Error fetching sorted posts:', error);
+          this.loading = false;
+        }
+      );
+  }
 }

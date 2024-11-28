@@ -262,4 +262,12 @@ export class PostComponent implements OnInit {
         }
       );
   }
+
+  onImageSelected(event: Event, post: any): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      post.newImage = file; // Store the selected file in the post object
+    }
+  }
 }
