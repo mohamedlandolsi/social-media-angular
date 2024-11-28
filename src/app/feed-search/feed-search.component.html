@@ -78,7 +78,7 @@
               Edit
             </button>
             <button
-              (click)="deletePost(post)"
+              (click)="confirmDelete(post)"
               class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-white dark:text-gray-200 dark:hover:bg-red-500"
             >
               Delete
@@ -178,7 +178,9 @@
       <div *ngIf="post.isEditing" class="p-6">
         <form (submit)="savePost(post)">
           <div>
-            <label for="title" class="block text-gray-700 dark:text-gray-200">Title</label>
+            <label for="title" class="block text-gray-700 dark:text-gray-200"
+              >Title</label
+            >
             <input
               id="title"
               [(ngModel)]="post.newTitle"
@@ -188,7 +190,9 @@
             />
           </div>
           <div class="mt-4">
-            <label for="description" class="block text-gray-700 dark:text-gray-200"
+            <label
+              for="description"
+              class="block text-gray-700 dark:text-gray-200"
               >Description</label
             >
             <textarea
@@ -226,6 +230,8 @@
           </div>
         </form>
       </div>
+
+      
     </div>
   </div>
 </div>

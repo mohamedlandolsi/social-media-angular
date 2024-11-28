@@ -169,13 +169,24 @@ export class PostComponent implements OnInit {
   }
 
   deletePost(post: any) {
+    if (!this.userId) {
+      console.error('User ID not found.');
+      return;
+    }
+
     const token = this.authService.getToken();
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json', // Ensure JSON body is properly sent
+    });
+
+    const body = { userId: this.userId }; // Include userId in the request body
 
     this.httpClient
-      .delete(`http://localhost:3000/api/post/${post._id}`, { headers })
+      .delete(`http://localhost:3000/api/post/${post._id}`, { headers, body })
       .subscribe(
         (response) => {
+          // Filter out the deleted post from the posts array
           this.posts = this.posts.filter((p) => p._id !== post._id);
           alert('Post deleted successfully!');
         },
@@ -184,5 +195,11 @@ export class PostComponent implements OnInit {
           alert('Failed to delete post. Please try again.');
         }
       );
+  }
+
+  confirmDelete(post: any) {
+    if (confirm('Are you sure you want to delete this post?')) {
+      this.deletePost(post);
+    }
   }
 }
