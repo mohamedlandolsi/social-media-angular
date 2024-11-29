@@ -111,7 +111,12 @@ export class UserService {
   // Delete user by admin
   deleteUserByAdmin(userId: string, token: string): Observable<any> {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.delete(`${this.apiUrl}/admin/${userId}`, { headers });
+
+    // Ensure proper method and body structure
+    return this.http.delete(`${this.apiUrl}/admin`, {
+      headers: headers,
+      body: { userId }, // Correctly structure the request body
+    });
   }
 
   // Update user as admin

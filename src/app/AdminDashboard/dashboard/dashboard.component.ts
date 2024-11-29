@@ -11,4 +11,6 @@ export class DashboardComponent {
   setActiveTab(tab: string): void {
     this.activeTab = tab;
   }
+
+  
 }

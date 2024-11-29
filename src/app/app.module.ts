@@ -29,6 +29,7 @@ import { SortByComponent } from './sort-by/sort-by.component';
 import { UsersComponent } from './AdminDashboard/users/users.component';
 import { PostsComponent } from './AdminDashboard/posts/posts.component';
 import { DashboardComponent } from './AdminDashboard/dashboard/dashboard.component';
+import { UpdateUserModalComponent } from './AdminDashboard/update-user-modal/update-user-modal.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { DashboardComponent } from './AdminDashboard/dashboard/dashboard.compone
     UsersComponent,
     PostsComponent,
     DashboardComponent,
+    UpdateUserModalComponent,
   ],
   imports: [
     BrowserModule,

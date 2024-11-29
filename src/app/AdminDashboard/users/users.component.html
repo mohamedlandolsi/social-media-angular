@@ -177,6 +177,7 @@
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                   <div class="flex items-center gap-x-6">
                     <button
+                      (click)="deleteUser(user._id)"
                       class="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none"
                     >
                       <svg
@@ -196,6 +197,7 @@
                     </button>
 
                     <button
+                      (click)="isOpen = true"
                       class="text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none"
                     >
                       <svg
@@ -307,3 +309,10 @@
     </a>
   </div>
 </section>
+
+<div class="relative flex justify-center">
+  <app-update-user-modal
+    *ngIf="isOpen"
+    (closeModal)="toggleModal()"
+  ></app-update-user-modal>
+</div>
