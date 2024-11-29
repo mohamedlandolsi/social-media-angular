@@ -84,7 +84,6 @@ export class FeedSearchComponent extends PostComponent {
         async (posts) => {
           this.posts = await Promise.all(
             posts.map(async (post) => {
-              console.log(post._id)
               const user = await this.fetchUser(post.userId);
               const liked = post.likes.includes(this.userId);
               return {
