@@ -102,19 +102,28 @@ export class PostComponent implements OnInit {
   }
 
   likePost(post: any) {
+    // Debugging the post object
+    console.log("Liking post:", post);
+    
     if (!this.userId) {
       console.error('User ID not found.');
       return;
     }
-
+  
+    // Ensure that the post object has _id
+    if (!post || !post._id) {
+      console.error('Invalid post object or missing post ID:', post._id);
+      return;
+    }
+  
     const token = this.authService.getToken();
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     const likeData = { userId: this.userId };
-
+  
+    console.log('Liking post with ID:', post._id, 'by user:', this.userId);
+  
     this.httpClient
-      .put(`http://localhost:3000/api/post/${post._id}/like`, likeData, {
-        headers,
-      })
+      .put(`http://localhost:3000/api/post/${post._id}/like`, likeData, { headers })
       .subscribe(
         (response) => {
           post.liked = !post.liked; // Toggle the liked state
@@ -127,6 +136,7 @@ export class PostComponent implements OnInit {
         }
       );
   }
+  
 
   editPost(post: any) {
     post.isEditing = true;
