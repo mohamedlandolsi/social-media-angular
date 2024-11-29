@@ -101,4 +101,31 @@ export class UserService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get(`${this.baseUrl}/post/user/${userId}`, { headers });
   }
+
+  // Fetch all users (admin only)
+  getAllUsers(token: string): Observable<User[]> {
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<User[]>(`${this.apiUrl}/admin/all`, { headers });
+  }
+
+  // Delete user by admin
+  deleteUserByAdmin(userId: string, token: string): Observable<any> {
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.delete(`${this.apiUrl}/admin/${userId}`, { headers });
+  }
+
+  // Update user as admin
+  updateUserByAdmin(
+    userId: string,
+    updatedData: any,
+    token: string
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.put(`${this.apiUrl}/admin/${userId}`, updatedData, {
+      headers,
+    });
+  }
 }

@@ -1,0 +1,40 @@
+<div class="bg-white dark:bg-gray-900">
+    <div class="flex">
+      <!-- Sidebar -->
+      <app-sidebar
+        class="hidden lg:block w-1/4 bg-gray-100 dark:bg-gray-800 min-h-screen"
+      ></app-sidebar>
+  
+      <!-- Main Content -->
+      <div class="flex-grow">
+        <!-- Tabs -->
+        <div class="container mx-auto px-6 py-4">
+          <div class="flex border-b dark:border-gray-700">
+            <button
+              class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 focus:outline-none"
+              [class.border-b-2]="activeTab === 'users'"
+              [class.border-blue-500]="activeTab === 'users'"
+              (click)="setActiveTab('users')"
+            >
+              Users Management
+            </button>
+            <button
+              class="px-4 py-2 ml-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 focus:outline-none"
+              [class.border-b-2]="activeTab === 'posts'"
+              [class.border-blue-500]="activeTab === 'posts'"
+              (click)="setActiveTab('posts')"
+            >
+              Posts Management
+            </button>
+          </div>
+        </div>
+  
+        <!-- Tab Content -->
+        <div class="container mx-auto px-6 py-4">
+          <app-users *ngIf="activeTab === 'users'"></app-users>
+          <app-posts *ngIf="activeTab === 'posts'"></app-posts>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -134,4 +134,9 @@ export class AuthService {
     }
     console.log('User ID set to:', this.userId);
   }
+
+  getUserData(userId: string): Observable<User> {
+    return this.httpClient.get<User>(`${this.baseUrl}/users/${userId}`);
+  }
+  
 }

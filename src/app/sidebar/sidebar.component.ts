@@ -16,6 +16,7 @@ export class SidebarComponent implements OnInit {
   isLoggedIn: boolean = false;
   userId: string | null = null;
   userData: any;
+  isAdmin: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -45,6 +46,9 @@ export class SidebarComponent implements OnInit {
       }
     });
 
+    
+    
+
     this.loadUserData();
   }
 
@@ -61,6 +65,7 @@ export class SidebarComponent implements OnInit {
     if (this.userId) {
       this.userService.getUserById(this.userId).subscribe((data) => {
         this.userData = data; // Store data in a component property
+        this.isAdmin = data.isAdmin === true; // Check if the user is an admin
       });
     }
   }

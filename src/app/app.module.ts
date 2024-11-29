@@ -26,6 +26,9 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 import { FeedSearchComponent } from './feed-search/feed-search.component';
 import { AdvancedFilterComponent } from './advanced-filter/advanced-filter.component';
 import { SortByComponent } from './sort-by/sort-by.component';
+import { UsersComponent } from './AdminDashboard/users/users.component';
+import { PostsComponent } from './AdminDashboard/posts/posts.component';
+import { DashboardComponent } from './AdminDashboard/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,9 @@ import { SortByComponent } from './sort-by/sort-by.component';
     FeedSearchComponent,
     AdvancedFilterComponent,
     SortByComponent,
+    UsersComponent,
+    PostsComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,

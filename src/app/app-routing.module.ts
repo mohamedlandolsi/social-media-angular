@@ -6,6 +6,9 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './settings/settings.component';
+import { UsersComponent } from './AdminDashboard/users/users.component';
+import { PostsComponent } from './AdminDashboard/posts/posts.component';
+import { DashboardComponent } from './AdminDashboard/dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -13,6 +16,11 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'profile/:userId', component: ProfileComponent },
   { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
+
+  // Admin routes
+  { path: 'admin', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'admin/users', component: UsersComponent, canActivate: [AuthGuard] },
+  { path: 'admin/posts', component: PostsComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
