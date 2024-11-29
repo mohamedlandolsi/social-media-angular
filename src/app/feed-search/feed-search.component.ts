@@ -26,21 +26,26 @@ export class FeedSearchComponent extends PostComponent {
     const headers = { Authorization: `Bearer ${token}` };
 
     if (this.searchQuery.trim() === '') {
-      this.posts = [];
-      return;
+      // If search query is empty, show all posts
+      this.loadAllPosts();
+    } else {
+      // Otherwise, perform the search with filters
+      this.performSearch(headers);
     }
+  }
 
+  loadAllPosts(): void {
     this.loading = true;
 
-    // Construct query params
-    let queryParams = `query=${this.searchQuery}`;
+    // Construct query params for fetching all posts
+    let queryParams = '';
     if (this.filterOption) {
-      queryParams += `&filter=${this.filterOption}`;
+      queryParams += `filter=${this.filterOption}`;
     }
 
     this.httpClient
       .get<any[]>(`http://localhost:3000/api/post/search?${queryParams}`, {
-        headers,
+        headers: { Authorization: `Bearer ${this.authService.getToken()}` },
       })
       .subscribe(
         async (response) => {
@@ -67,12 +72,40 @@ export class FeedSearchComponent extends PostComponent {
       );
   }
 
-  override onImageSelected(event: Event, post: any): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      post.newImage = file; // Store the selected file in the post object
+  performSearch(headers: any): void {
+    this.loading = true;
+
+    // Construct query params for the search
+    let queryParams = `query=${this.searchQuery}`;
+    if (this.filterOption) {
+      queryParams += `&filter=${this.filterOption}`;
     }
+
+    this.httpClient
+      .get<any[]>(`http://localhost:3000/api/post/search?${queryParams}`, { headers })
+      .subscribe(
+        async (response) => {
+          this.posts = await Promise.all(
+            response.map(async (post) => {
+              const user = await this.fetchUser(post.userId);
+              const liked = post.likes.includes(this.userId);
+              return {
+                ...post,
+                ...user,
+                image: post.image,
+                liked,
+                dropdownOpen: false,
+                isEditing: false,
+              };
+            })
+          );
+          this.loading = false;
+        },
+        (error) => {
+          console.error('Error fetching posts:', error);
+          this.loading = false;
+        }
+      );
   }
 
   onSortChange(sortOption: string): void {
