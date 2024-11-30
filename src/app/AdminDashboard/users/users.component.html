@@ -158,7 +158,7 @@
                 <td
                   class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"
                 >
-                  Bio is not available
+                  {{ user.description }}
                 </td>
                 <td
                   class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"
@@ -197,7 +197,7 @@
                     </button>
 
                     <button
-                      (click)="isOpen = true"
+                      (click)="openUpdateModal(user)"
                       class="text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none"
                     >
                       <svg
@@ -312,7 +312,9 @@
 
 <div class="relative flex justify-center">
   <app-update-user-modal
-    *ngIf="isOpen"
+    *ngIf="isModalOpen"
+    [user]="selectedUser"
     (closeModal)="toggleModal()"
+    (refreshUsers)="loadUsers()"
   ></app-update-user-modal>
 </div>

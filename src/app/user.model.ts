@@ -3,6 +3,10 @@ export interface User {
   username: string; // Username
   email: string; // Email
   password: string; // Password
+  description: string; // Description
+  city: string; // City
+  homeTown: string; // From
+  relationship: string; // Relationship
   createdAt: string; // Account creation date
   updatedAt: string; // Account update date
   profilePicture: string; // Profile picture URL

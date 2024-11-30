@@ -9,6 +9,8 @@ import { User } from '../../user.model';
 })
 export class UsersComponent implements OnInit {
   users: User[] = [];
+  isModalOpen = false;
+  selectedUser: any = {};
 
   constructor(private userService: UserService) {}
 
@@ -20,11 +22,21 @@ export class UsersComponent implements OnInit {
     this.userService.getUsers().subscribe(
       (data) => {
         this.users = data;
+        console.log('Users:', this.users);
       },
       (error) => {
         console.error('Error fetching users:', error);
       }
     );
+  }
+
+  openUpdateModal(user: any) {
+    this.selectedUser = { ...user }; // Clone user object
+    this.isModalOpen = true;
+  }
+
+  toggleModal() {
+    this.isModalOpen = false;
   }
 
   deleteUser(userId: string): void {
@@ -49,11 +61,5 @@ export class UsersComponent implements OnInit {
         }
       );
     }
-  }
-
-  isOpen = false; // Modal visibility state
-
-  toggleModal(): void {
-    this.isOpen = !this.isOpen;
   }
 }
