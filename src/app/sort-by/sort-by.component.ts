@@ -7,7 +7,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class SortByComponent {
   isOpen = false; // Tracks the dropdown state
-  selectedSortOption: string = 'title'; // Default selected option
+  selectedSortOption: string = 'date'; // Default selected option
 
   // Emit the selected sorting option to the parent
   @Output() sortSelected = new EventEmitter<string>();

@@ -74,7 +74,7 @@ export class SidebarComponent implements OnInit {
     this.authService.logout();
     this.isLoggedIn = false;
     this.username = null;
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 
   isActiveRoute(route: string): boolean {
