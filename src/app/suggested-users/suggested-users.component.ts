@@ -78,7 +78,8 @@ export class SuggestedUsersComponent implements OnInit {
       this.suggestedUsers = users.filter(
         (user: User) =>
           !this.followingIds.includes(user._id) && // Exclude followed users
-          user._id !== this.loggedInUserId // Exclude the logged-in user
+          user._id !== this.loggedInUserId && // Exclude the logged-in user
+          user.status === 'active' // Include only active users
       );
     });
   }

@@ -26,21 +26,22 @@ export class FeedSearchComponent extends PostComponent {
       this.onSearch();
     });
   }
+
   override fetchUser(userId: string): Promise<{ username: string; userId: string }> {
     return this.httpClient
-      .get<{ _id: string; username?: string; profilePicture?: string }>(
+      .get<{ _id: string; username?: string; profilePicture?: string; status?: string }>(
         `http://localhost:3000/api/users/${userId}`
       )
       .toPromise()
       .then((response) => {
-        if (response && response._id) {
+        if (response && response._id && response.status === 'active') {
           return {
             userId: response._id,
             username: response.username || 'Unknown User',
             profilePicture: response.profilePicture,
           };
         } else {
-          console.warn('User not found or invalid response:', response);
+          console.warn('User not found, inactive, or invalid response:', response);
           return {
             userId,
             username: 'Unknown User',
@@ -59,43 +60,48 @@ export class FeedSearchComponent extends PostComponent {
         };
       });
   }
-  
-  
-  
-  // Override fetchPosts to customize functionality
+
   override fetchPosts(): void {
     this.loading = true;
     this.errorMessage = '';
-
+  
     const token = this.authService.getToken();
     const headers = { Authorization: `Bearer ${token}` };
-
+  
     let params = new HttpParams()
       .set('query', this.searchQuery || '')
       .set('filter', this.filterOption || '');
-
+  
     if (this.sortOption) {
       params = params.set('sort', this.sortOption); // Include sort parameter if provided
     }
-
+  
     this.httpClient
       .get<any[]>(`http://localhost:3000/api/post/search`, { headers, params })
       .subscribe(
         async (posts) => {
-          this.posts = await Promise.all(
+          // Process posts and fetch user details
+          const activePosts = await Promise.all(
             posts.map(async (post) => {
-              const user = await this.fetchUser(post.userId);
-              const liked = post.likes.includes(this.userId);
-              return {
-                ...post,
-                ...user,
-                image: post.image,
-                liked,
-                dropdownOpen: false,
-                isEditing: false,
-              };
+              const user = await this.fetchUser(post.userId); // Fetch user details
+              if (user.username !== 'Unknown User') {
+                // Include posts only if the user is active
+                const liked = post.likes.includes(this.userId);
+                return {
+                  ...post,
+                  ...user,
+                  image: post.image,
+                  liked,
+                  dropdownOpen: false,
+                  isEditing: false,
+                };
+              }
+              return null; // Exclude posts by inactive or unknown users
             })
           );
+  
+          // Filter out null entries (inactive/unknown users)
+          this.posts = activePosts.filter((post) => post !== null);
           this.loading = false;
         },
         (error) => {
@@ -105,6 +111,7 @@ export class FeedSearchComponent extends PostComponent {
         }
       );
   }
+  
 
   onSearchInput(event: Event): void {
     const query = (event.target as HTMLInputElement).value;
@@ -120,7 +127,6 @@ export class FeedSearchComponent extends PostComponent {
       this.fetchPosts(); // Use the child component's overridden fetchPosts
     }
   }
-  
 
   onFilterSelected(filter: string): void {
     this.filterOption = filter;
