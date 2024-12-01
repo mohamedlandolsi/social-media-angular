@@ -143,7 +143,7 @@ export class UserService {
     });
   
     return this.http.put(
-      `http://localhost:3000/api/users/admin/${userId}/status`, 
+      `${this.apiUrl}/admin/${userId}/status`, 
       { status },
       { headers }
     );

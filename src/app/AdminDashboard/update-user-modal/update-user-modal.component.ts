@@ -18,7 +18,7 @@ export class UpdateUserModalComponent {
   }
 
   updateUser() {
-    const token = localStorage.getItem('token'); // Retrieve token from local storage
+    const token = localStorage.getItem('authToken'); // Retrieve token from local storage
     if (!token) {
       alert('Authorization error: No token found.');
       return;
