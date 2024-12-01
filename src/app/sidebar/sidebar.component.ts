@@ -76,4 +76,8 @@ export class SidebarComponent implements OnInit {
     this.username = null;
     this.router.navigate(['/']);
   }
+
+  isActiveRoute(route: string): boolean {
+    return this.router.url === route;
+  }
 }
