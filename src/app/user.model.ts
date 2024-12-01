@@ -3,6 +3,7 @@ export interface User {
   username: string; // Username
   email: string; // Email
   password: string; // Password
+  status: string;
   description: string; // Description
   city: string; // City
   homeTown: string; // From

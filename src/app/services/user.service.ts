@@ -133,4 +133,20 @@ export class UserService {
       headers,
     });
   }
+
+  // New method to update user's active status
+  updateUserStatus(userId: string, status: string): Observable<any> {
+    const token = localStorage.getItem('authToken'); // Get token from storage
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  
+    return this.http.put(
+      `http://localhost:3000/api/users/admin/${userId}/status`, 
+      { status },
+      { headers }
+    );
+  }
+  
 }
