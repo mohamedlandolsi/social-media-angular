@@ -1,7 +1,5 @@
 <section class="bg-white dark:bg-gray-900">
-  <div
-    class="container flex items-center justify-center min-h-screen px-6 mx-auto"
-  >
+  <div class="container flex items-center justify-center min-h-screen px-6 mx-auto">
     <form class="w-full max-w-md" (ngSubmit)="loginUser()" #loginForm="ngForm">
       <app-logo class="flex items-center justify-center mb-4"></app-logo>
 
@@ -19,6 +17,7 @@
         {{ errorMessage }}
       </div>
 
+      <!-- Input for username or email -->
       <div class="relative flex items-center mt-8">
         <span class="absolute">
           <svg
@@ -32,22 +31,23 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              d="M16 12H8m0 0l4-4m-4 4l4 4m8-6V6a2 2 0 00-2-2H6a2 2 0 00-2 2v6m16 6H4a2 2 0 01-2-2V6a2 2 0 012-2h12a2 2 0 012 2v6a2 2 0 002 2h4"
             />
           </svg>
         </span>
 
         <input
-          type="email"
+          type="text"
           class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-          placeholder="Email address"
-          name="email"
-          [(ngModel)]="credentials.email"
+          placeholder="Username or Email"
+          name="usernameOrEmail"
+          [(ngModel)]="credentials.usernameOrEmail"
           [ngModelOptions]="{ standalone: true }"
           required
         />
       </div>
 
+      <!-- Input for password -->
       <div class="relative flex items-center mt-4">
         <span class="absolute">
           <svg
@@ -77,6 +77,7 @@
         />
       </div>
 
+      <!-- Submit button -->
       <div class="mt-6">
         <button
           type="submit"
@@ -98,7 +99,6 @@
               d="M36.3425 16.7358H35V16.6667H20V23.3333H29.4192C28.045 27.2142 24.3525 30 20 30C14.4775 30 10 25.5225 10 20C10 14.4775 14.4775 9.99999 20 9.99999C22.5492 9.99999 24.8683 10.9617 26.6342 12.5325L31.3483 7.81833C28.3717 5.04416 24.39 3.33333 20 3.33333C10.7958 3.33333 3.33335 10.7958 3.33335 20C3.33335 29.2042 10.7958 36.6667 20 36.6667C29.2042 36.6667 36.6667 29.2042 36.6667 20C36.6667 18.8825 36.5517 17.7917 36.3425 16.7358Z"
               fill="#FFC107"
             />
-            <!-- Other paths remain unchanged -->
           </svg>
 
           <span class="mx-2">Sign in with Google</span>
