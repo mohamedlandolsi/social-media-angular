@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    protected httpClient: HttpClient
   ) {
     this.currentUserId = this.authService.getCurrentUserId(); // Get the current user ID
   }
@@ -139,5 +141,38 @@ export class ProfileComponent implements OnInit {
         );
       }
     }
+  }
+
+  likePost(post: any) {    
+    if (!this.userId) {
+      console.error('User ID not found.');
+      return;
+    }
+  
+    // Ensure that the post object has _id
+    if (!post || !post._id) {
+      console.error('Invalid post object or missing post ID:', post._id);
+      return;
+    }
+  
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    const likeData = { userId: this.userId };
+  
+    console.log('Liking post with ID:', post._id, 'by user:', this.userId);
+  
+    this.httpClient
+      .put(`http://localhost:3000/api/post/${post._id}/like`, likeData, { headers })
+      .subscribe(
+        (response) => {
+          post.liked = !post.liked; // Toggle the liked state
+          post.likes = post.liked
+            ? [...post.likes, this.userId]
+            : post.likes.filter((id: string) => id !== this.userId);
+        },
+        (error) => {
+          console.error('Error liking post:', error);
+        }
+      );
   }
 }
