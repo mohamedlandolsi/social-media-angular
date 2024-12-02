@@ -87,12 +87,12 @@ export class PostsComponent implements OnInit {
       return;
     }
 
-    const token = this.authService.getToken();
+    const token = localStorage.getItem('authToken');
     if (!token) {
       console.error('Token not found.');
       return;
     }
-    
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
